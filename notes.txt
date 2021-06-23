@@ -1,0 +1,13 @@
+1. build project
+2 nav bar 4 links and a name
+3 subject item grid
+i-mages
+-titles
+-descriptions
+-animations
+-javascript
+4. about page
+-image -text
+5. support
+ - link to patreon
+

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Delta Learning</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+
+    <h1>Castles</h1>
+ <p>A castle is a type of fortified structure built during the Middle Ages predominantly by the nobility or royalty and by military orders. Scholars debate the scope of the word castle, but usually consider it to be the private fortified residence of a lord or noble. This is distinct from a palace, which is not fortified; from a fortress, which was not always a residence for royalty or nobility; and from a fortified settlement, which was a public defence – though there are many similarities among these types of construction. Usage of the term has varied over time and has been applied to structures as diverse as hill forts and country houses. Over the approximately 900 years that castles were built, they took on a great many forms with many different features, although some, such as curtain walls, arrowslits, and portcullises, were commonplace.
+    </p>
+<h2>How Medieval Castles Were Built </h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gbwbi6uurG0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+ 
+<h2>How to Build the Perfect Castle</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Syjg6PHYFBo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    
+<h2>The different types of medieval Castles</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Hv6Yl45g1y4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    
+<h2>Life In A 13th Century Castle </h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qMspm83hiWY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<h2>Medieval Castle Painting</h2>   
+<iframe width="560" height="315" src="https://www.youtube.com/embed/GZmpn3nn2qE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<h2>The Rooms of Castles</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Y5mb2Zcw6mc?start=68" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</body>
+<h2>The Story of Castle Rushen: One of Europe's best-preserved Medieval Castles</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/SdFlXbF2kos?start=68" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>

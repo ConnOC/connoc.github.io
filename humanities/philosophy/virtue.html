@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Virtue</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="..//index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="..//about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="..//support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+      
+      
+<h1>Virtue</h1>
+ <p>Principal Investigators Candace Vogler and Jennifer A. Frey present “Virtue, Happiness, and the Meaning of Life: A Collaboration”
+Under what conditions do the everyday activities associated with being a good person provide a source of happiness and meaning in human life? What is the difference between morally serious people whose lives give them deep happiness and a sense of purpose, and morally serious people whose lives feel hollow?
+</p>
+      <h2>Virtue, Happiness, and the Meaning of Life</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/EBkZRDFf2is" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+
+</html>

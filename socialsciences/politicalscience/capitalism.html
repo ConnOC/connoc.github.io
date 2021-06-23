@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Delta Learning</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="..//styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+
+    <h1>Capitalism: Success, Crisis and Reform with Douglas W. Rae</h1>
+ <p>In this course, we will seek to interpret capitalism using ideas from biological evolution: Firms pursuing varied strategies and facing extinction when those strategies fail are analogous to organisms struggling for survival in nature. For this reason, it is less concerned with ultimate judgment of capitalism than with the ways it can be shaped to fit our more specific objectives -- for the natural environment, public health, alleviation of poverty, and development of human potential in every child. Each book we read will be explicitly or implicitly an argument about good and bad consequences of capitalism.
+    </p>
+      <h2>Exploding Worlds and Course Introduction</h2>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PL2497FD1251EED4DD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+ <p><a href="https://libgen.is/book/index.php?md5=A38DEF1B80543DFAECA70D9FF21D3C31"> book</a></p>
+</body>
+
+<script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+
+</html>

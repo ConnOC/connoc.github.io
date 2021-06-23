@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Delta Learning</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="..//styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="..//index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="..//about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="..//support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+
+    <h1>Ancient History</h1>
+ <p>Ancient history is the aggregate of past events from the beginning of writing and recorded human history and extending as far as post-classical history. The phrase may be used either to refer to the period of time or the academic discipline.
+
+The span of recorded history is roughly 5,000 years, beginning with the Sumerian cuneiform script, with the oldest coherent texts from about 2600 BC. Ancient history covers all continents inhabited by humans in the period 3000 BC – AD 500.
+    </p>
+<p><a href="ancientchina.html"> Ancient China</a></p>
+<p><a href="ancientrome.html"> Ancient Egypt</a></p>
+<p><a href="ancientrome.html"> Ancient Greece</a></p>
+<p><a href="ancientrome.html"> Ancient Rome</a></p>
+<p><a href="ancientrome.html"> Ancient Arabia</a></p>
+<p><a href="ancientrome.html"> Ancient Rome</a></p>
+<p><a href="ancientrome.html"> Ancient Rome</a></p>
+<p><a href="BronzeAge.html">Bronze Age</a></p>
+
+ 
+ <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLh9mgdi4rNeyViG2ar68jkgEi4y6doNZy" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+</body>
+
+<script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+
+</html>

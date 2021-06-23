@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset='UTF-8'>
+  <title>Delta Learning</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="..//styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="ndependent%20learing%20website/index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="..//about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="..//support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+      <h1>Leadership Lab</h1>
+      <p>How to write in the Acedemy</p>
+
+<h2>The Craft of Writing Effectively</h2>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/vtIzMaLkCaM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h2> Writing Beyond the Academy/h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/aFwVf5a3pZM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h2> Successful Grant and Fellowship Writing</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/g7YfQ9vlWSs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h2> Writing Beyond the Academy </h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/aFwVf5a3pZM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h2> Publishing in Academic Journals</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/aFwVf5a3pZM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h2> Writing Beyond the Academy 1.23.15</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/aFwVf5a3pZM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h2> Writing Beyond the Academy 1.23.15</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/aFwVf5a3pZM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <h2> Writing Beyond the Academy 1.23.15</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/aFwVf5a3pZM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      
+
+
+
+</body>
+<script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Delta Learning</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="..//styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="..//index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="..//about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="..//support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+
+    <h1>Politic Science</h1>
+ <p>Political science is the scientific study of politics. It is a social science dealing with systems of governance and power, and the analysis of political activities, political thoughts, political behavior, and associated constitutions and laws.
+    </p>
+<p><a href="powerandpolitics.html"> Introduction to Power and Politics in Today’s World</a></p>
+ <a href="geopolitics.html"><h3>Geopolitics</h3></a>
+<p><a href="moralfoundationsofpol.html">Moral Foundations of Politics</a></p>
+<p><a href="capitalism.html">Capitalism</a></p>
+<p><a href="AchientChina.html">Acient China</a></p>
+<p><a href="MiddleAges.html"><h3>Middle Ages</h3></a></p>
+<a href="ColombianExchange.html">Colombian Exchange</a></p>
+<a href="HistoryOfJapan.html">History of Japan</a></p>
+<a href="modernhistory.html"><h3>Modern History</h3></a>
+</body>
+</html>
+
+</body>
+
+<script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+
+</html>

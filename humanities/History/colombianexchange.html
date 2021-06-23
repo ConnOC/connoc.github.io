@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Delta Learning</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="..//styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="..//index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="..//about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="..//support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+      
+
+<h1>Colombian Exchange</h1>
+<p>The Columbian exchange, also known as the Columbian interchange, named after Christopher Columbus, was the widespread transfer of plants, animals, culture, human populations, technology, diseases, and ideas between the Americas, the Old World, and West Africa in the 15th and 16th centuries.</p>
+<p>Pre contact dogs</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/osMu6i2txFA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<p>Americapox: The Missing Plague</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JEYh5WACqEk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    
+</body>
+    <script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+</html>

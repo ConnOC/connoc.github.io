@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Delta Learning</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="..//styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+
+    <h1>bahai</h1>
+ <p>The Baháʼí Faith is a relatively new religion teaching the essential worth of all religions and the unity of all people. Established by Baháʼu'lláh in the 19th century, it initially developed in Persia and parts of the Middle East, where it has faced ongoing persecution since its inception.[13] The religion is estimated to have over five million adherents, known as Baháʼís, spread throughout most of the world's countries and territories
+    </p>
+
+ <h2>The Bahá'i Faith [Part 1] - Origins & The Báb</h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/bc7AvTq1FGY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+      
+<h2>The bahai faith part 2</h2> 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/75jZKEY2aRo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='UTF-8'>
+  <title>Delta Learning</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link rel="stylesheet" href="..//styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="nav-wrapper">
+      <div class="left-side">
+        <div class="nav-link-wrapper active-nav-link">
+          <a href="ndependent%20learing%20website/index.html">Home</a>
+        </div>
+
+        <div class="nav-link-wrapper">
+          <a href="..//about.html">About</a>
+        </div>
+          
+        <div class="nav-link-wrapper">
+            <a href="..//support.html">Support</a>
+        </div>
+      </div>
+
+      <div class="right-side">
+        <div class="brand">
+          Delta Learning
+        </div>
+      </div>
+    </div>
+      
+      
+<h1>History by Country</h1>
+ <p>Click on each country to see it's histry.
+    </p>
+    
+    <a href="#africa">Click here to see Africa.</a>
+    <a href="#oceania">Click here to see Oceania.</a>
+    <a href="#europe">Click here to see Europe.</a>
+    <a href="#asia">Click here to Asia</a>
+    <a href="#theamericas">Click here to see the Americas</a>
+    
+      <a id="europe"><h1>Europe</h1></a>  
+<p><a href="irishhistory.html">Irish History</a></p>
+ <a href="LeadershipLab.html"><h3>Leadership Lab: The Craft of Writing Effectively</h3></a>
+<p><a href="BronzeAge.html">Bronze Age</a></p>
+<p><a href="BrithishMedevalHistory.html">Brithish Medeval History</a></p>
+<p><a href="AchientChina.html">Acient China</a></p>
+<p><a href="MiddleAges.html"><h3>Middle Ages</h3></a></p>
+<a href="ColombianExchange.html">Colombian Exchange</a></p>
+<a href="HistoryOfJapan.html">History of Japan</a></p>
+<a href="modernhistory.html"><h3>Modern History</h3></a>
+</body>
+
+<a id="africa"><h2>Africa</h2></a>
+<a id="asia"><h2>Asia</h2></a>
+<a id="theamericas"><h2>Americas</h2></a>
+<a id="oceania"><h2>Oceania</h2></a>
+
+
+<script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+
+</html>

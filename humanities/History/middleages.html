@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Middle Ages</h1>
+<p>In the history of Europe, the Middle Ages or Medieval Period lasted from the 5th to the late 15th century. It began with the fall of the Western Roman Empire and merged into the Renaissance and the Age of Discovery. The Middle Ages is the middle period of the three traditional divisions of Western history: classical antiquity, the medieval period, and the modern period. The medieval period is itself subdivided into the Early, High, and Late Middle Ages.</p>
+    <a href="earlymiddleages.html">Early Middle Ages</a>
+<p><a href="vikingage.html">Viking Age</a></p>
+    <p><a href="castles.html">Castles</a></p>
+    <p><a href="BrithishMedevalHistory.html">Brithish Medeval History</a></p>
+
+    <p></p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/bRcu-ysocX4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    
+    </body>
+    
+
+    <script>
+  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
+
+  portfolioItems.forEach(portfolioItem => {
+    portfolioItem.addEventListener('mouseover', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.add('image-blur');
+    });
+
+    portfolioItem.addEventListener('mouseout', () => {
+      console.log(portfolioItem.childNodes[1].classList)
+      portfolioItem.childNodes[1].classList.remove('image-blur');
+    });
+  });
+
+</script>
+
+</html>
