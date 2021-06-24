@@ -130,7 +130,14 @@ background-color: #322F3D;
 profile-content-wrapper h1 {
   color: lightseagreen;
 }
+h1{
+  text-align: center;
+}
 
+h2{
+  text-align: center;
+}
 p{
-  align-text:center;
+  text-align: center;
+
 }
