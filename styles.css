@@ -1,7 +1,6 @@
 body {
   font-family: "Lato", sans-serif;
-  margin: 20px;
-  text-align: center;
+  margin: 0px;
   color: antiquewhite;
   background-color: #322F3D;
 }
@@ -62,20 +61,20 @@ background-color: #322F3D;
   color: black;
 }
 
-.portfolio-items-wrapper {
+.discipline-subjects-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
 
-.portfolio-item-wrapper {
+.discipline-subject-wrapper {
   position: relative;
 }
 
-.portfolio-img-background {
+.discipline-img-background {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 250px;
+  height: 350px;
   width: 100%;
 }
 
@@ -88,8 +87,8 @@ background-color: #322F3D;
   align-items: center;
   height: 100%;
   text-align: center;
-  padding-left: 400px;
-  padding-right: 400px;
+  padding-left: 100px;
+  padding-right: 100px;
 }
 
 .img-text-wrapper .subtitle {
@@ -128,6 +127,6 @@ background-color: #322F3D;
 .brand{
     color: coral;
 }
-.subtitle{
-    text-align: center
+profile-content-wrapper h1 {
+  color: lightseagreen;
 }
