@@ -9,6 +9,7 @@ a{
 }
 h1{
     color: #87556f;
+    text-align: center;
 }
 .container {
   display: grid;
