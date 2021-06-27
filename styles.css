@@ -14,7 +14,10 @@ h1{
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-background-color: #322F3D;
+  grid-template-rows: 100px
+  gap:10px
+  padding:10px
+  background-color: #322F3D;
 }
 
 .nav-wrapper {
