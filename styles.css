@@ -1,80 +1,147 @@
-/*master styles*/
-body{
-    margin: 0px;
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@500&display=swap');
+:root{
+  font-size: 30px;
+}
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: #3A4854;
+   text-decoration: none;
+   color: white;
+   text-align: center;
+   font-family: sans-serif;
+   font-size: 30px;
+}
+h1{
+  font-size: 50px;
+}
+li, a, form, span, h1{
+  font-family: Teko;
+  color: yellow;
+  text-decoration: none;
 }
 
-.container {
-    display: grid;
-    grid-template-columns: 1fr;
+header{
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 10%;
+}
+nav-links{
+  list-style: none;
+}
+.nav-links li{
+  display: inline-block;
+  padding: 0px 20px;
+}
+.nav-links li a{
+  transition: all 0.3s ease 0s;
+}
+.nav-links li a:hover{
+  color: #0088a9;
+}
+form{
+  padding 9px 25px
+
+}
+.subject{
+  text-align: center;
+  border-width: 12px;
+  border-style: solid;
+  border-color: #649FA4;
+  border-radius: 10px;
+  width: 500px;
+  height: 300px;
+  margin: 50px 50px 50px 50px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
-.nav-wrapper{
-    display: flex;
-    justify-content: space-between;
-    padding: 38px;
+.description{
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(50%, -50%);
 }
 
-.left-side{
-    display: flex;
+.test {
+  position: relative;
+  text-align: center;
+  margin: 200px 200px 200px 200px;
+  height: 300px;
+  width: 500px;
+  border-color: #649FA4;
+  border-style: solid;
+  border-width: 12px;
+  border-radius: 10px;
+
+  background-image: url(images/chemistry.jpg);
+
+}
+.subject-1{
+  padding: 100px 100px 50px 100px;
+  text-align: center;
+  border-width: 12px;
+  border-style: solid;
+  border-color: #649FA4;
+  border-radius: 10px;
+  width: 500px;
+  height: 300px;
+  margin: 50px 50px 50px 50px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  background-image: url(images/philosophy.jpg);
 }
 
-.nav-wrapper > .left-side > div{
-    margin-right: 20px;
-    font-size: 0.9em;
-    text-transform: uppercase;
+.subject-2{
+  padding: 100px 100px 50px 100px;
+  text-align: center;
+  border-width: 12px;
+  border-style: solid;
+  border-color: #649FA4;
+  border-radius: 10px;
+  width: 500px;
+  height: 300px;
+  margin: 50px 50px 50px 50px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  background-image: url(images/anthropology.jpg);
 }
-
-.nav-link-wrapper {
-    height: 22px;
-    border-bottom: 1px solid transparent;
-    transition: border-bottom 0.5s;
+.subject-3{
+  padding: 100px 100px 50px 100px;
+  text-align: center;
+  border-width: 12px;
+  border-style: solid;
+  border-color: #649FA4;
+  border-radius: 10px;
+  width: 500px;
+  height: 300px;
+  margin: 50px 50px 50px 50px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  background-image: url(images/biology.jpg);
 }
-
-.nav-link-wrapper a {
-    color: #8a8a8a;
-    text-decoration: none;
-    transition: color 0.5s;
+.subject-4{
+  padding: 100px 100px 50px 100px;
+  text-align: center;
+  border-width: 12px;
+  border-style: solid;
+  border-color: #649FA4;
+  border-radius: 10px;
+  width: 500px;
+  height: 300px;
+  margin: 50px 50px 50px 50px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  background-image: url(images/css.jpg);
 }
-
-.nav-link-wrapper:hover {
-    border-bottom: 1px solid black;
-}
-
-.nav-link-wrapper a :hover {
-color: black
-}
-/*portfolio styles*/
-.subject-items-wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-}
-
-.subject-item-wrapper {
-    position: relative;
-}
-
-.subject-img-backround {
-    height: 350px;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.img-text-wrapper {
-    position: absolute;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    text-align: center;
-    padding-left: 100px;
-    padding-right: 100px;
-}
-
-.logo-wrapper img {
-    width: 50%;
-    margin-bottom: 20px;
+.subject-5{
+  padding: 100px 100px 50px 100px;
+  text-align: center;
+  border-width: 12px;
+  border-style: solid;
+  border-color: #649FA4;
+  border-radius: 10px;
+  width: 500px;
+  height: 300px;
+  margin: 50px 50px 50px 50px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  background-image: url(images/medicine.jpg);
 }
