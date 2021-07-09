@@ -9,99 +9,54 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="nav-wrapper">
-      <div class="left-side">
-        <div class="nav-link-wrapper active-nav-link">
-          <a href="index.html">Home</a>
-        </div>
+  <header>
+    <nav>
+      <ul class="nav-links"
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="support.html">Support</a></li>
+      </ul>
+      </nav>
+      <span>Platypus smart search &#8482;<span>
+      <form action="search-results.html">
+      <input type="text" placeholder="search topic" required>
+      <button type="submit">Submit</button>
+    </form>
+  </header>
+  <hr>
+  <main>
+<h1>Platypus<h1>
+<hr>
+<div class="subject-1 subject">
+  <a href="humanities/humanities.html">
+Humanities
+</a>
+</div>
 
-        <div class="nav-link-wrapper">
-          <a href="about.html">About</a>
-        </div>
+<div class="subject-2 subject">
+  <a href="humanities/humanities.html">
+Social Sciences
+</a>
+</div>
 
-        <div class="nav-link-wrapper">
-            <a href="support.html">Support</a>
-        </div>
-      </div>
+<div class="subject-3 subject">
+  <a href="humanities/humanities.html">
+Natural Sciences
+</a>
+</div>
 
-      <div class="right-side">
-        <div class="brand">
-          Delta Learning
-        </div>
-      </div>
-    </div>
+<div class="subject-4 subject">
+  <a href="humanities/humanities.html">
+Formal Sciences
+</a>
+</div>
 
-    <div class="content-wrapper">
-      <div class="discipline-subjects-wrapper">
+<div class="subject-5 subject">
+  <a href="humanities/humanities.html">
+Applied Sciences
+</a>
+</div>
 
-        <div class="discipline-subject-wrapper">
-          <div class="discipline-img-background" style="background-image:url(images/humanities.jpg)"<a href="humanities/humanities.html">></div>
-
-          <div class="img-text-wrapper">
-
-            <div class="subtitle"><a href="humanities/humanities.html">Humanities</div>
-          </div>
-        </div>
-
-        <div class="discipline-subject-wrapper">
-          <div class="discipline-img-background" style="background-image:url(images/economics.jpg)"<a href="socialsciences/socialsciences.html">></div>
-          <div class="img-text-wrapper">
-
-            <div class="subtitle"><a href="socialsciences/socialsciences.html">Social Sciences</div>
-          </div>
-        </div>
-
-        <div class="discipline-subject-wrapper">
-          <div class="discipline-img-background" style="background-image:url(images/chemistry.jpg)"></div>
-          <div class="img-text-wrapper">
-
-
-            <div class="subtitle"><a href="naturalsciences/naturalsciences.html">Natural Sciences</div>
-          </div>
-        </div>
-
-        <div class="discipline-subject-wrapperr">
-          <div class="discipline-img-background" style="background-image:url(images/css.jpg)"></div>
-          <div class="img-text-wrapper">
-
-            <div class="subtitle"><a href="formalsciences/formalsciences.html">Formal Sciences</div>
-          </div>
-        </div>
-
-        <div class="discipline-subject-wrapper">
-          <div class="discipline-img-background" style="background-image:url(images/medicine.jpg)"></div>
-          <div class="img-text-wrapper">
-
-
-            <div class="subtitle"><a href="appliedsciences/appliedsciences.html">Applied Sciences</div>
-          </div>
-        </div>
-
-
-
-
-      </div>
-    </div>
-  </div>
-
+<main>
 </body>
-
-<script>
-  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
-
-  portfolioItems.forEach(portfolioItem => {
-    portfolioItem.addEventListener('mouseover', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.add('image-blur');
-    });
-
-    portfolioItem.addEventListener('mouseout', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.remove('image-blur');
-    });
-  });
-
-</script>
-
 </html>
