@@ -152,7 +152,8 @@ form{
   margin: 50px 50px 50px 50px;
 }
 .content-wrapper img{
-  width: 100%
+  width: 500px;
+  height: 300px;
 }
 
 .text-wrapper{
