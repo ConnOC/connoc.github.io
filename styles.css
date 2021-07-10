@@ -147,7 +147,8 @@ form{
 }
 
 .content-wrapper{
-  width: 30%
+  width: 500px;
+  height: 300px;
   margin: 50px 50px 50px 50px;
 }
 .content-wrapper img{
@@ -162,7 +163,7 @@ form{
 
 .text-wrapper h2{
   text-align: center;
-  color: inherit;
-  font-size: 10vw;
+  color: yellow;
+  font-size: 30px;
 
 }
