@@ -145,3 +145,24 @@ form{
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   background-image: url(images/medicine.jpg);
 }
+
+.content-wrapper{
+  width: 30%
+  margin: 50px 50px 50px 50px;
+}
+.content-wrapper img{
+  width: 100%
+}
+
+.text-wrapper{
+  width: 100%;
+  position: relative;
+  margin-top: -40%
+  }
+
+.text-wrapper h2{
+  text-align: center;
+  color: inherit;
+  font-size: 10vw;
+
+}
