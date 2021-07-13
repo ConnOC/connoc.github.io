@@ -9,30 +9,26 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="nav-wrapper">
-      <div class="left-side">
-        <div class="nav-link-wrapper active-nav-link">
-          <a href="/index.html">Home</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-          <a href="/about.html">About</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-            <a href="/support.html">Support</a>
-        </div>
-      </div>
-
-      <div class="right-side">
-        <div class="brand">
-          Delta Learning
-        </div>
-      </div>
-    </div>
-
+  <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/support.html">Support</a></li>
+      </ul>
+      </nav>
+      <span>Platypus smart search &#8482;<span>
+      <form action="/search-results.html">
+      <input type="text" placeholder="search topic" required>
+      <button type="submit">Submit</button>
+    </form>
+  </header>
+  <hr>
+  <main>
+<h1>Platypus</h1>
+<hr>
 <h1>Theology</h1>
+<hr>
  <p>Theology is the systematic study of the nature of the divine and, more broadly, of religious belief. It is taught as an academic discipline, typically in universities and seminaries. It occupies itself with the unique content of analyzing the supernatural, but also deals with religious epistemology, asks and seeks to answer the question of revelation. Revelation pertains to the acceptance of God, gods, or deities, as not only transcendent or above the natural world, but also willing and able to interact with the natural world and, in particular, to reveal themselves to humankind.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/HUfkVBHPuVs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -55,23 +51,3 @@
       <a href="jainism.html">Jainsism</a>
         <a href="taoism.html">Taoism</a>
           <a href="jainism.html">Jainsism</a>
-
-
-</body>
-
-<script>
-  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
-
-  portfolioItems.forEach(portfolioItem => {
-    portfolioItem.addEventListener('mouseover', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.add('image-blur');
-    });
-
-    portfolioItem.addEventListener('mouseout', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.remove('image-blur');
-    });
-  });
-
-</script>
