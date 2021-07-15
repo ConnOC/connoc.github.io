@@ -67,6 +67,9 @@ a:hover{
 .subject-1{
   background-image: url(images/philosophy.jpg);
 }
+.subject-1: hover{
+transform: scale(1.1); 
+}
 
 .subject-2{
   background-image: url(images/anthropology.jpg);
