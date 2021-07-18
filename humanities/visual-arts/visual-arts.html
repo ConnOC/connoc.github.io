@@ -34,25 +34,9 @@
 <p><a href="fine-arts/fine-arts.html">Fine Arts</a></p>
  <a href="architecture/architecture.html"><h3>Architecture</h3></a>
 <p><a href="fashion/fashion.html">fashion</a></p>
-<p><a href="appliedarts/appliedarts.html">Applied Arts</a></p>
-
+<p><a href="applied-arts/applied-arts.html">Applied Arts</a></p>
+</main>
 </body>
 
-<script>
-  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
-
-  portfolioItems.forEach(portfolioItem => {
-    portfolioItem.addEventListener('mouseover', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.add('image-blur');
-    });
-
-    portfolioItem.addEventListener('mouseout', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.remove('image-blur');
-    });
-  });
-
-</script>
 
 </html>

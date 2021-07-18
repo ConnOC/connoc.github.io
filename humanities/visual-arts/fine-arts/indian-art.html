@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 
 <head>
   <meta charset='UTF-8'>
@@ -9,30 +9,26 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="nav-wrapper">
-      <div class="left-side">
-        <div class="nav-link-wrapper active-nav-link">
-          <a href="/index.html">Home</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-          <a href="/about.html">About</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-            <a href="/support.html">Support</a>
-        </div>
-      </div>
-
-      <div class="right-side">
-        <div class="brand">
-          Delta Learning
-        </div>
-      </div>
-    </div>
-
-
+  <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/support.html">Support</a></li>
+      </ul>
+      </nav>
+      <span>Platypus smart search &#8482;<span>
+      <form action="/search-results.html">
+      <input type="text" placeholder="search topic" required>
+      <button type="submit">Submit</button>
+    </form>
+  </header>
+  <hr>
+  <main>
+<h1><a href="humanities.html">Humanities</a></h1>
+<hr>
+<h1><a href="visual-arts.html">Visual Arts</a></h1>
+<hr>
 <h1>Indian art</h1>
  <p>Indian art consists of a variety of art forms, including painting, sculpture, pottery, and textile arts such as woven silk. Geographically, it spans the entire Indian subcontinent, including what is now India, Pakistan, Bangladesh, Sri Lanka, Nepal, Bhutan and eastern Afghanistan. A strong sense of design is characteristic of Indian art and can be observed in its modern and traditional forms.</p>
     <h2>Bidriware</h2>
@@ -40,21 +36,7 @@
  <h2>Rogan Art</h2>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/H3Den05Q_D0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-<script>
-  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
-
-  portfolioItems.forEach(portfolioItem => {
-    portfolioItem.addEventListener('mouseover', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.add('image-blur');
-    });
-
-    portfolioItem.addEventListener('mouseout', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.remove('image-blur');
-    });
-  });
-
-</script>
+</main>
+<body>
 
 </html>
