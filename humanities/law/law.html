@@ -1,43 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 
 <head>
   <meta charset='UTF-8'>
-  <title>Law</title>
+  <title>Delta Learning</title>
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
-  <div class="container">
-    <div class="nav-wrapper">
-      <div class="left-side">
-        <div class="nav-link-wrapper active-nav-link">
-          <a href="/index.html">Home</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-          <a href="/about.html">About</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-            <a href="/support.html">Support</a>
-        </div>
-      </div>
-
-      <div class="right-side">
-        <div class="brand">
-          Delta Learning
-        </div>
-      </div>
-    </div>
+  <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/support.html">Support</a></li>
+      </ul>
+      </nav>
+      <span>Platypus smart search &#8482;<span>
+      <form action="search-results.html">
+      <input type="text" placeholder="search topic" required>
+      <button type="submit">Submit</button>
+    </form>
+  </header>
+  <main>
+  <hr>
+  <
+<h1><a href="humanities.html">Humanities</a><h1>
+<hr>
 
 
 <h1>Law</h1>
- <p>Philosophy (from Greek: φιλοσοφία, philosophia, 'love of wisdom') is the study of general and fundamental questions, such as those about existence, reason, knowledge, values, mind, and language. Such questions are often posed as problems to be studied or resolved. The term was probably coined by Pythagoras (c. 570 – c. 495 BCE). Philosophical methods include questioning, critical discussion, rational argument, and systematic presentation.
+ <p>Law is a system of rules created and enforced through social or governmental institutions to regulate behavior.
     </p>
-<p><a href="virtue.html">Science Communication</a></p>
- <a href="LeadershipLab.html"><h3>Leadership Lab: The Craft of Writing Effectively</h3></a>
+
+ <h3><a href="criminallaw.html">Criminal Law</a><h3>
 <p><a href="BronzeAge.html">Bronze Age</a></p>
 <p><a href="BrithishMedevalHistory.html">Brithish Medeval History</a></p>
 <p><a href="AchientChina.html">Acient China</a></p>
@@ -47,21 +44,6 @@
 <a href="modernhistory.html"><h3>Modern History</h3></a>
 </body>
 
-<script>
-  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
 
-  portfolioItems.forEach(portfolioItem => {
-    portfolioItem.addEventListener('mouseover', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.add('image-blur');
-    });
-
-    portfolioItem.addEventListener('mouseout', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.remove('image-blur');
-    });
-  });
-
-</script>
 
 </html>
