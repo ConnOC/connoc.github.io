@@ -5,32 +5,31 @@
   <meta charset='UTF-8'>
   <title>Delta Learning</title>
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
-  <div class="container">
-    <div class="nav-wrapper">
-      <div class="left-side">
-        <div class="nav-link-wrapper active-nav-link">
-          <a href="..//index.html">Home</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-          <a href="about.html">About</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-            <a href="support.html">Support</a>
-        </div>
-      </div>
-
-      <div class="right-side">
-        <div class="brand">
-          Delta Learning
-        </div>
-      </div>
-    </div>
+  <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/support.html">Support</a></li>
+      </ul>
+      </nav>
+      <span>Platypus smart search &#8482;<span>
+      <form action="search-results.html">
+      <input type="text" placeholder="search topic" required>
+      <button type="submit">Submit</button>
+    </form>
+  </header>
+  <main>
+  <hr>
+  <h1><a href="/appliedsciences/appliedsciences.html">Applied Sciences</a><h1>
+<hr>
+<h1><a href="/medicine-and-health/medicine-and-health.html">Medicine and Health</a><h1>
+ <p>Medicine is the science and practice of caring for a patient and managing the diagnosis, prognosis, prevention, treatment or palliation of their injury or disease. Medicine encompasses a variety of health care practices evolved to maintain and restore health by the prevention and treatment of illness.
+    </p>
 
     <h1>Evolution and Medicine</h1>
  <p>This course is a survey of evolutionary insights that make important differences in medical research and clinical practice, including evolutionary mechanisms and the medical issues they affect. Individual genetic variation in susceptibility; evolutionary conflicts and tradeoffs in reproductive medicine; the evolution of antibiotic resistance and virulence in pathogens; emerging diseases; the evolution of aging; cancer as an evolutionary process.
@@ -40,21 +39,6 @@
  <p><a href="https://libgen.is/book/index.php?md5=A38DEF1B80543DFAECA70D9FF21D3C31"> book</a></p>
 </body>
 
-<script>
-  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
 
-  portfolioItems.forEach(portfolioItem => {
-    portfolioItem.addEventListener('mouseover', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.add('image-blur');
-    });
-
-    portfolioItem.addEventListener('mouseout', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.remove('image-blur');
-    });
-  });
-
-</script>
 
 </html>
