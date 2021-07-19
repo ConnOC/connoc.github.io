@@ -1,43 +1,38 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 
 <head>
   <meta charset='UTF-8'>
   <title>Delta Learning</title>
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-  <link rel="stylesheet" href="..//styles.css">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
-  <div class="container">
-    <div class="nav-wrapper">
-      <div class="left-side">
-        <div class="nav-link-wrapper active-nav-link">
-          <a href="ndependent%20learing%20website/index.html">Home</a>
-        </div>
+  <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/support.html">Support</a></li>
+      </ul>
+      </nav>
+      <span>Platypus smart search &#8482;<span>
+      <form action="search-results.html">
+      <input type="text" placeholder="search topic" required>
+      <button type="submit">Submit</button>
+    </form>
+  </header>
+  <main>
+  <hr>
+  <h1><a href="/social-sciences/social-sciences.html">Social Sciences</a><h1>
+<hr>
 
-        <div class="nav-link-wrapper">
-          <a href="..//about.html">About</a>
-        </div>
-          
-        <div class="nav-link-wrapper">
-            <a href="..//support.html">Support</a>
-        </div>
-      </div>
-
-      <div class="right-side">
-        <div class="brand">
-          Delta Learning
-        </div>
-      </div>
-    </div>
-      
-      
 <h1>Communications</h1>
  <p>Communication theory is a field of information theory and mathematics that studies the technical process of information,[1] as well as a field of psychology, sociology, semiotics and anthropology studying interpersonal communication and intrapersonal communication.
     </p>
-<p><a href="sciencecommunication.html">Science Communication</a></p>
- <a href="LeadershipLab.html"><h3>Leadership Lab: The Craft of Writing Effectively</h3></a>
+<p><a href="science=communication.html">Science Communication</a></p>
+ <a href="leadership-lab.html"><h3>Leadership Lab: The Craft of Writing Effectively</h3></a>
 <p><a href="BronzeAge.html">Bronze Age</a></p>
 <p><a href="BrithishMedevalHistory.html">Brithish Medeval History</a></p>
 <p><a href="AchientChina.html">Acient China</a></p>
@@ -45,23 +40,7 @@
 <a href="ColombianExchange.html">Colombian Exchange</a></p>
 <a href="HistoryOfJapan.html">History of Japan</a></p>
 <a href="modernhistory.html"><h3>Modern History</h3></a>
+
+</main>
 </body>
-
-<script>
-  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
-
-  portfolioItems.forEach(portfolioItem => {
-    portfolioItem.addEventListener('mouseover', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.add('image-blur');
-    });
-
-    portfolioItem.addEventListener('mouseout', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.remove('image-blur');
-    });
-  });
-
-</script>
-
 </html>
