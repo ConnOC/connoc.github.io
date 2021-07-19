@@ -5,60 +5,42 @@
   <meta charset='UTF-8'>
   <title>Delta Learning</title>
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body>
-  <div class="container">
-    <div class="nav-wrapper">
-      <div class="left-side">
-        <div class="nav-link-wrapper active-nav-link">
-          <a href="index.html">Home</a>
-        </div>
-
-        <div class="nav-link-wrapper">
-          <a href="about.html">About</a>
-        </div>
-          
-        <div class="nav-link-wrapper">
-            <a href="support.html">Support</a>
-        </div>
-      </div>
-
-      <div class="right-side">
-        <div class="brand">
-          Delta Learning
-        </div>
-      </div>
-    </div>
+  <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/about.html">About</a></li>
+        <li><a href="/support.html">Support</a></li>
+      </ul>
+      </nav>
+      <span>Platypus smart search &#8482;<span>
+      <form action="search-results.html">
+      <input type="text" placeholder="search topic" required>
+      <button type="submit">Submit</button>
+    </form>
+  </header>
+  <main>
+  <hr>
+  <h1><a href="/social-sciences/social-sciences.html">Social Sciences</a><h1>
+<hr>
+<h1><a href="/social-sciences/comunications/communication.html">Communications</a><h1>
+<hr>
 
     <h1>Science communication</h1>
  <p>Science communication is the practice of informing, educating, raising awareness of science-related topics, and increasing the sense of wonder about scientific discoveries and arguments. Science communicators and audiences are ambiguously defined and the expertise and level of science knowledge varies with each group.
     </p>
 <h2>There is no algorythm for truth</h2>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/leX541Dr2rU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
- 
+
 <h2>A History of Western Architecture: Greece & Rome, Part I</h2>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CwK1qtxDTeY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    
+
 <h2>A History of Western Architecture: Greece & Rome, Part II</h2>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/fXAMR6-7eFw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+</main>
 </body>
-
-<script>
-  const portfolioItems = document.querySelectorAll('.portfolio-item-wrapper');
-
-  portfolioItems.forEach(portfolioItem => {
-    portfolioItem.addEventListener('mouseover', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.add('image-blur');
-    });
-
-    portfolioItem.addEventListener('mouseout', () => {
-      console.log(portfolioItem.childNodes[1].classList)
-      portfolioItem.childNodes[1].classList.remove('image-blur');
-    });
-  });
-
-</script>
+</html>
