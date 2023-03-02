@@ -115,7 +115,7 @@ height: 300px;
 width: 500px;
 }
 
-main{
+choices{
  background-color: aquamarine;
  display: grid; 
  grid-template-columns: 25% 25% 25% 25%;
