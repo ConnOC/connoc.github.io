@@ -115,10 +115,17 @@ height: 300px;
 width: 500px;
 }
 
-.project{
- color: aquamarine;
+main{
+ background-color: aquamarine;
  display: grid; 
  grid-template-columns: 25% 25% 25% 25%;
  grid-template-rows: 25% 25% 25% 25%;
- 
+}
+
+#project-1{
+  grid-column-start: 1;
+}
+
+£prject-2{
+  grid-column-start: 2;
 }
