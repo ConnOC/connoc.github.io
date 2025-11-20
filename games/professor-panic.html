@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projector Panic!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* --- Game Container --- */
+        #game-container {
+            width: 800px;
+            height: 500px;
+            background-color: #e0e0e0; /* Classroom wall */
+            border: 5px solid #333;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* --- UI Elements --- */
+        #ui-layer {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bar-container {
+            background: #333;
+            width: 45%;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .label {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: white;
+            line-height: 30px;
+            font-weight: bold;
+            z-index: 2;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        #projector-bar { background: red; width: 0%; height: 100%; transition: width 0.1s; }
+        #cable-bar { background: #4CAF50; width: 0%; height: 100%; transition: width 0.1s; }
+
+        #message-area {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 200;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border: 3px solid black;
+            display: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+            border: none;
+            margin-top: 10px;
+        }
+
+        /* --- The Environment --- */
+        .blackboard {
+            position: absolute;
+            top: 80px;
+            left: 50px;
+            width: 700px;
+            height: 200px;
+            background-color: #2d3e2d;
+            border: 8px solid #5c4033;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 2rem;
+        }
+
+        .desk {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            background-color: #8B4513;
+            border-top: 5px solid #5e2f0d;
+            z-index: 10;
+        }
+
+        /* --- The Professor (CSS Art) --- */
+        #professor {
+            position: absolute;
+            bottom: 80px; /* Behind desk */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 220px;
+            z-index: 5;
+            transition: transform 0.1s;
+        }
+
+        /* Body */
+        .prof-body {
+            position: absolute;
+            bottom: -20px;
+            left: 10px;
+            width: 180px;
+            height: 150px;
+            background-color: #556B2F; /* Tweed Jacket */
+            border-radius: 50% 50% 20% 20%;
+        }
+
+        /* Shirt */
+        .prof-shirt {
+            position: absolute;
+            top: 20px;
+            left: 70px;
+            width: 40px;
+            height: 130px;
+            background: #fff;
+        }
+        
+        .prof-tie {
+            position: absolute;
+            top: 20px;
+            left: 80px;
+            width: 20px;
+            height: 100px;
+            background: #800000;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Head */
+        .prof-head {
+            position: absolute;
+            top: 0;
+            left: 45px;
+            width: 110px;
+            height: 120px;
+            background-color: #ffdbac; /* Skin */
+            border-radius: 40%;
+            z-index: 2;
+        }
+
+        /* Hair (Balding, white sides) */
+        .hair-left {
+            position: absolute;
+            top: 40px;
+            left: -10px;
+            width: 30px;
+            height: 50px;
+            background: #eee;
+            border-radius: 50%;
+        }
+        .hair-right {
+            position: absolute;
+            top: 40px;
+            right: -10px;
+            width: 30px;
+            height: 50px;
+            background: #eee;
+            border-radius: 50%;
+        }
+
+        /* Glasses */
+        .glasses {
+            position: absolute;
+            top: 45px;
+            width: 35px;
+            height: 35px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+        }
+        .g-left { left: 15px; }
+        .g-right { right: 15px; }
+        .g-bridge {
+            position: absolute;
+            top: 60px;
+            left: 50px;
+            width: 10px;
+            height: 3px;
+            background: #333;
+        }
+
+        /* Sweat Drop (animated via JS) */
+        .sweat {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 10px;
+            height: 15px;
+            background: #00BFFF;
+            border-radius: 0 50% 50% 50%;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+
+        /* --- Laptop & Cable --- */
+        .laptop {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 90px;
+            background: #333;
+            border-radius: 5px 5px 0 0;
+            z-index: 15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .screen {
+            width: 120px;
+            height: 70px;
+            background: #ff0055; /* Embarrassing color */
+            animation: flash 0.5s infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        @keyframes flash {
+            0% { background: #ff0055; }
+            50% { background: #ff69b4; }
+            100% { background: #ff0055; }
+        }
+
+        .cable {
+            position: absolute;
+            bottom: 100px;
+            left: calc(50% + 70px);
+            width: 200px;
+            height: 5px;
+            background: #000;
+            z-index: 14;
+            transform-origin: left center;
+        }
+
+        /* Controls Hint */
+        .controls-hint {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.2rem;
+            color: white;
+            z-index: 50;
+            text-shadow: 1px 1px 2px black;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="ui-layer">
+        <div class="bar-container">
+            <div class="label">PROJECTOR WARMING UP</div>
+            <div id="projector-bar"></div>
+        </div>
+        <div class="bar-container">
+            <div class="label">DISCONNECT PROGRESS</div>
+            <div id="cable-bar"></div>
+        </div>
+    </div>
+
+    <div id="message-area">
+        <h1 id="msg-title">PROJECTOR PANIC!</h1>
+        <p id="msg-desc">You left an embarrassing tab open!</p>
+        <p>Spam <strong>SPACEBAR</strong> or <strong>CLICK</strong> anywhere to rip the cord out before the projector turns on!</p>
+        <button onclick="startGame()">START CLASS</button>
+    </div>
+
+    <div class="controls-hint" id="hint">PRESS SPACEBAR REPEATEDLY!</div>
+
+    <div class="blackboard">
+        Monumentality 101
+    </div>
+
+    <div id="professor">
+        <div class="prof-head">
+            <div class="hair-left"></div>
+            <div class="hair-right"></div>
+            <div class="glasses g-left"></div>
+            <div class="glasses g-right"></div>
+            <div class="g-bridge"></div>
+            <div class="sweat" id="sweat-drop"></div>
+        </div>
+        <div class="prof-body"></div>
+        <div class="prof-shirt"></div>
+        <div class="prof-tie"></div>
+    </div>
+
+    <div class="cable" id="cable"></div>
+    <div class="desk"></div>
+    <div class="laptop">
+        <div class="screen">
+            PRIVATE<br>FILES
+        </div>
+    </div>
+</div>
+
+<script>
+    // Game Variables
+    let gameActive = false;
+    let disconnectProgress = 0;
+    let projectorProgress = 0;
+    let difficulty = 0.3; // Speed of projector
+    let clickPower = 4; // Progress per click
+
+    // DOM Elements
+    const projectorBar = document.getElementById('projector-bar');
+    const cableBar = document.getElementById('cable-bar');
+    const cable = document.getElementById('cable');
+    const professor = document.getElementById('professor');
+    const sweatDrop = document.getElementById('sweat-drop');
+    const msgArea = document.getElementById('message-area');
+    const msgTitle = document.getElementById('msg-title');
+    const msgDesc = document.getElementById('msg-desc');
+    const hint = document.getElementById('hint');
+
+    // Initialization
+    msgArea.style.display = 'block';
+    hint.style.display = 'none';
+
+    function startGame() {
+        gameActive = true;
+        disconnectProgress = 0;
+        projectorProgress = 0;
+        
+        msgArea.style.display = 'none';
+        hint.style.display = 'block';
+        
+        updateBars();
+        gameLoop();
+    }
+
+    function gameLoop() {
+        if (!gameActive) return;
+
+        // Increase projector progress (Time limit)
+        projectorProgress += difficulty;
+        
+        // Passive regression (cable slips if you stop clicking)
+        if (disconnectProgress > 0) {
+            disconnectProgress -= 0.1;
+        }
+
+        // Visual updates based on tension
+        if (projectorProgress > 50) {
+            sweatDrop.style.opacity = 1;
+        } else {
+            sweatDrop.style.opacity = 0;
+        }
+
+        updateBars();
+        checkGameState();
+
+        if (gameActive) {
+            requestAnimationFrame(gameLoop);
+        }
+    }
+
+    function pull() {
+        if (!gameActive) return;
+
+        disconnectProgress += clickPower;
+        if (disconnectProgress > 100) disconnectProgress = 100;
+
+        // Animation: Shake professor
+        professor.style.transform = `translateX(-50%) rotate(${Math.random() * 10 - 5}deg)`;
+        setTimeout(() => {
+            professor.style.transform = `translateX(-50%) rotate(0deg)`;
+        }, 50);
+
+        // Animation: Wiggle cable
+        cable.style.transform = `rotate(${Math.random() * 10 - 5}deg)`;
+        
+        updateBars();
+    }
+
+    function updateBars() {
+        projectorBar.style.width = projectorProgress + '%';
+        cableBar.style.width = disconnectProgress + '%';
+
+        // Change color of projector bar as it gets critical
+        if(projectorProgress > 80) {
+            projectorBar.style.backgroundColor = '#ff0000';
+        } else {
+            projectorBar.style.backgroundColor = '#ff4444';
+        }
+    }
+
+    function checkGameState() {
+        if (disconnectProgress >= 100) {
+            endGame(true);
+        } else if (projectorProgress >= 100) {
+            endGame(false);
+        }
+    }
+
+    function endGame(win) {
+        gameActive = false;
+        msgArea.style.display = 'block';
+        hint.style.display = 'none';
+
+        if (win) {
+            msgTitle.textContent = "SAFE!";
+            msgTitle.style.color = "green";
+            msgDesc.textContent = "You yanked the cable just in time. The class suspects nothing.";
+            // Visual fix
+            cable.style.display = 'none'; 
+        } else {
+            msgTitle.textContent = "BUSTED!";
+            msgTitle.style.color = "red";
+            msgDesc.textContent = "The projector turned on. The class saw your weird browser history. You will be releieved of teaching duties, be relieved they didn't search your entire hard drive";
+        }
+        
+        // Reset button text
+        document.querySelector('button').textContent = "TRY AGAIN";
+        
+        // Reset visuals for next game
+        if(win) {
+             setTimeout(() => { cable.style.display = 'block'; }, 100);
+        }
+    }
+
+    // Input Listeners
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            pull();
+        }
+    });
+
+    document.addEventListener('mousedown', () => {
+        pull();
+    });
+    
+    // Prevent double firing on mobile
+    document.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Stop zoom
+        pull();
+    }, {passive: false});
+
+</script>
+
+</body>
+</html>
