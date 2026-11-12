@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cú Chulainn: The Ford of Ulster</title>
+<style>
+:root{color-scheme:dark}
+html,body{margin:0;height:100%;background:#120e1c;display:flex;align-items:center;justify-content:center;flex-direction:column}
+canvas{width:min(96vw,768px);height:auto;image-rendering:pixelated;border:4px solid #c8893a;box-shadow:0 0 0 4px #2a1f14}
+p{margin:10px 0 0;font:12px monospace;color:#8a7a5a}
+</style>
+</head>
+<body>
+<canvas id="c" width="256" height="224"></canvas>
+<p>Move: arrows/WASD · Enter/Z talk · Fights: Z strike · X dash · C special · R restart</p>
+<script>
+const cv=document.getElementById('c'),ctx=cv.getContext('2d');ctx.imageSmoothingEnabled=false;
+const TS=16,W=184,H=216;
+const COL={k:'#1a1424',b:'#2d2a4a',s:'#e8b890',r:'#b8382c',y:'#f0b84a',g:'#3f8a6b',o:'#d08a3a',m:'#a8b0bc',p:'#6a3f8c',w:'#fff6e0'};
+const SPR={
+hero:["...kkkkkk...","..kbbbbbbk..",".kbbbbbbbbk.",".kbssssssbk.",".kbskssksbk.",".kssssssssk.","..kssssssk..","...krrrrk...","..krrrrrrk..",".krryyyyrrk.",".krrrrrrrrk.","..kkkkkkkk.."],
+cat:["..kk....kk..","..kbk..kbk..","..kbbbbbbk..",".kbybbbbybk.",".kbbbbbbbbk.",".kbbbkkbbbk.","..kbbbbbbk..","...kbbbbk...","..kbbbbbbk..","..kbb..bbk..","..kbb..bbk..","..kkk..kkk.."],
+warrior:["...kkkkkk...","..kmmmmmmk..",".kmmmmmmmmk.",".kmmkkkkmmk.",".kssksskssk.",".kssssssssk.","..kssssssk..","...kggggk...","..kgggggggk.",".kgggyggggk.",".kggggggggk.","..kkkkkkkk.."]
+};
+const CL=[
+{name:'Sétanta',hp:60,max:60,spd:2.6,atk:12,shots:1,sd:8,sp:'Sliotar',pal:null,desc:'A boy with a hurley and a sliotar'}
+];
+const EN={
+scout:{n:'Connacht Scout',hp:18,spd:1.2,touch:3,pal:{},pats:['chase'],intro:['A Connacht scout attacks!'],win:['The scout flees into the rushes.']},
+guard:{n:'Connacht Guard',hp:40,spd:1.3,touch:4,pal:{g:'b',m:'y'},pats:['chase','volley','chase','ring'],intro:['Halt! No one crosses this road!'],win:['The guard staggers back.']},
+bull:{n:'Brown Bull of Cooley',bull:1,hp:90,spd:0,touch:6,pats:['charge','ring','charge','charge'],intro:['The Brown Bull of Cooley thunders from the hills!'],win:['The Brown Bull kneels before you.']},
+medb:{n:'Queen Medb',hp:110,spd:1.4,touch:6,pal:{g:'p',m:'y'},pats:['volley','chase','charge','volley','ring'],intro:['Ah, the hound of Ulster himself!','Give me the bull, or I take all of Ulster!'],win:['Medb flees in her chariot!','Ulster is saved! The Red Branch stands firm.']},
+warden:{n:'Sídhe Warden',hp:70,spd:1.1,touch:5,pal:{g:'w',m:'o'},pats:['volley','chase','ring'],intro:['Mortal, the Otherworld gives nothing freely.'],win:['The warden bows. Your strength grows.']},
+boy:{n:'Boy of the Troop',hp:14,spd:1.5,touch:2,pal:{g:'o',m:'w'},pats:['chase'],intro:['The boys close in!'],win:["Sétanta's ríastrad blazes. The boy goes down."]},
+champ:{n:'Connacht Champion',hp:45,spd:1.5,touch:5,pal:{g:'b',m:'y'},pats:['chase','volley','charge'],intro:['I take this ford by right of single combat!'],win:['The champion falls back across the ford.']},
+hound:{n:"Culann's Hound",hound:1,hp:80,spd:2.2,touch:6,pats:['chase','charge','chase','volley'],intro:["Culann's hound leaps at the stranger!"],win:['The hound lies still.']},
+scath:{n:'Scáthach',hp:60,spd:1.8,touch:4,pal:{g:'p',m:'w'},pats:['chase','volley','charge'],intro:['Show me the warrior you are, boy.'],win:['Scáthach nods. The spear is yours.']},
+dobhar:{n:'Dobhar-chú',hp:150,spd:1.1,touch:10,rad:56,otter:1,ey:110,pats:['chase','charge','volley','ring','chase'],intro:['A Dobhar-chú rises from the black water:','a giant otter with a white pelt and a black cross on its back!'],win:['The Dobhar-chú shrieks its whistle and sinks.']},
+bear:{n:'Bear',hp:70,spd:1.4,touch:8,rad:36,bear:1,pats:['chase','charge','ring','chase'],intro:['A bear rears up out of the wood!'],win:['The bear falls.'],drop:'bear'},
+wolf:{n:'Grey Wolf',hp:45,spd:2.4,touch:5,rad:18,wolf:1,pats:['chase','charge','chase'],intro:['A grey wolf snarls and springs!'],win:['The wolf goes still.'],drop:'wolf'},
+salmon:{n:'Salmon of Knowledge',hp:90,spd:1.5,touch:5,rad:30,salmon:1,pats:['chase','volley','charge'],intro:['The water boils. The Salmon of Knowledge breaks the surface!'],win:['The salmon sinks in silver light.'],drop:'salmon'}
+};
+
+// ---- geography: rough outline of Ireland and Skye, in tile space ----
+const TX=(lo,la)=>[(lo+10.7)*32,(57.9-la)*32];
+const IRE=[[-7.4,55.4],[-6.2,55.2],[-5.6,54.7],[-5.9,54.2],[-6.1,53.5],[-6.0,53.0],[-6.3,52.3],[-7.0,52.1],[-7.9,51.8],[-8.9,51.6],[-9.8,51.4],[-10.1,51.8],[-10.4,52.1],[-9.9,52.5],[-9.5,53.2],[-10.0,53.9],[-9.8,54.2],[-8.7,54.4],[-8.2,54.6]].map(([a,b])=>TX(a,b));
+const SKY=[[-6.8,57.4],[-6.3,57.9],[-5.6,57.7],[-5.7,57.1],[-6.4,57.0]].map(([a,b])=>TX(a,b));
+const inP=(x,y,p)=>{let c=false;for(let i=0,j=p.length-1;i<p.length;j=i++){const[a,b]=p[i],[e,f]=p[j];if((b>y)!=(f>y)&&x<(e-a)*(y-b)/(f-b)+a)c=!c;}return c;};
+const hh=(x,y)=>{let n=Math.imul(x,374761393)+Math.imul(y,668265263)|0;n=Math.imul(n^(n>>>13),1274126177);return((n^(n>>>16))>>>0)/4294967296;};
+
+let WM,M,MW,MH,mapName='world',DOCK,NG,SPAWN,P,START,FORD,boysDone=false,fordOn=false,owFrom=[0,0],curProv='',lastLoc='',banner=null,LOCS=[],LAKEOUT=[0,0],dobharDone=false,owBack='world',CAVEOUT=[0,0];
+let stage=0,bullDone=false,medbDone=false,owDone=false,mode='title',dlg=null,F=null,frame=0,mv=0,pick=0,camX=0,camY=0;
+const keys={};
+const ITEMS={hurley:{n:'Hurley',s:'weapon'},gae:{n:'Gáe Bulg',s:'weapon'},salmon:{n:'Salmon of Knowledge',s:'charm'},bear:{n:'Bear pelt',s:'armour'},wolf:{n:'Wolf pelt',s:'armour'}};
+let OWN=['hurley'],EQ={weapon:'hurley',charm:null,armour:null},invSel=0;
+const NPCS=[
+{m:'world',n:'king',spr:'warrior',pal:{g:'r',m:'y'}},
+{m:'world',n:'mother',lo:-6.05,la:53.93,spr:'warrior',pal:{g:'o',m:'y'}},
+{m:'world',n:'fergus',lo:-6.3,la:53.99,spr:'warrior',pal:{g:'b',m:'y'}},
+{m:'world',n:'boys',lo:-6.4,la:54.3,spr:'warrior',pal:{g:'o',m:'w'}},
+{m:'world',n:'culann',lo:-7.1,la:54.2,spr:'warrior',pal:{g:'b',m:'y'}},
+{m:'world',n:'medb',lo:-8.25,la:53.71,spr:'warrior',pal:{g:'p',m:'y'}},
+{m:'world',n:'scathach',lo:-6.05,la:57.36,spr:'warrior',pal:{g:'p',m:'w'}},
+{m:'world',n:'ferdiad',lo:-6.22,la:57.38,spr:'warrior',pal:{g:'g',m:'y'}},
+{m:'world',n:'rusruad',lo:-6.78,la:53.02,spr:'warrior',pal:{g:'g',m:'y'},say:['Rus Ruad, king of Leinster, stands among the old stones of Dún Ailinne.','"Leinster kings were made here. I will not see Connacht take what is ours."']},
+{m:'cave',n:'cat',x:5,y:5,spr:'cat',pal:null,say:['A black cat with gold eyes blinks slowly at you.','"You came through the old door. Few mortals ask politely to pass."']},
+{m:'cave',n:'cat',x:13,y:6,spr:'cat',pal:{b:'o'},say:['The cat purrs, and the whole cave seems to hum with it.','"The door at the back leads to the Otherworld. Its warden is grumpy, but fair."']},
+{m:'cave',n:'cat',x:8,y:8,spr:'cat',pal:{b:'m'},say:['A grey cat grooms a paw that is not quite a paw.','"We were here before the mound was raised. We do not mind visitors who mind their manners."']},
+{m:'cave',n:'cat',x:13,y:9,spr:'cat',pal:{b:'o'},say:['Three kittens tumble over one another, then stop and stare.','"Our mother walked through the door once. She came back with a different tale every time."']},
+{m:'ow',n:'warden',x:9,y:4,spr:'warrior',pal:{g:'w',m:'o'}}
+];
+const MEDB=NPCS.find(n=>n.n=='medb');
+
+function mkWorld(){
+ WM=[];
+ for(let y=0;y<H;y++){WM[y]=[];for(let x=0;x<W;x++){
+  let t='S';
+  if(inP(x+.5,y+.5,IRE)||inP(x+.5,y+.5,SKY)){const v=hh(x,y);t=hh(x>>2,y>>2)<.07?'M':hh(x>>1,y>>1)>.985?'V':v<.12?'T':v<.24?'R':'G';}
+  WM[y][x]=t;}}
+ const T=(lo,la)=>TX(lo,la).map(Math.floor);
+ const put=(lo,la,t,r=0)=>{const[x,y]=T(lo,la);for(let j=-r;j<=r;j++)for(let i=-r;i<=r;i++)if(WM[y+j]&&WM[y+j][x+i]!==undefined)WM[y+j][x+i]=t;};
+ const[sx,sy]=T(-6.64,54.35);
+ put(-6.64,54.35,'G',3);put(-6.64,54.35,'H',1);
+ const MU=T(-6.2,54.0);put(-6.2,54.0,'G',2);put(-6.2,54.0,'H',1);START=[MU[0]+2,MU[1]+2];
+ put(-7.1,54.15,'G',2);put(-7.1,54.15,'H',1);
+ FORD=T(-6.9,53.85);put(-6.9,53.85,'G',2);put(-6.9,53.85,'F');
+ put(-5.82,54.85,'G',1);put(-5.82,54.85,'D');
+ put(-6.13,57.41,'G',2);put(-6.13,57.41,'D');
+ put(-6.48,53.69,'G',3);{const[cx,cy]=T(-6.48,53.69),pt=(x,y,t)=>{if(WM[y]&&WM[y][x]!==undefined)WM[y][x]=t;};for(let j=-2;j<=2;j++)for(let i=-2;i<=2;i++){const d=i*i+j*j;if(d<4)pt(cx+i,cy+j,'N');else if(d==4)pt(cx+i,cy+j,'K');}pt(cx,cy+2,'O');pt(cx-1,cy+3,'E');}
+ put(-6.466,53.9745,'G',1);put(-6.466,53.9745,'U');
+ put(-8.27,54.364,'G',4);{const[gx,gy]=T(-8.27,54.364),pt=(x,y,t)=>{if(WM[y]&&WM[y][x]!==undefined)WM[y][x]=t;};for(let j=-2;j<=2;j++)for(let i=-3;i<=3;i++)pt(gx+i,gy+j,'A');LAKEOUT=[gx,gy+3];}
+ put(-6.3,53.98,'G',1);put(-6.3,53.98,'B');
+ put(-8.25,53.8,'G',2);put(-8.3,53.86,'C');put(-8.2,53.76,'C');
+ put(-6.72,53.62,'G',1);put(-6.72,53.62,'H',1);
+ put(-8.38,53.8,'G',1);put(-8.38,53.8,'Q');{const[ox,oy]=T(-8.38,53.8);CAVEOUT=[ox,oy+1];}
+ put(-7.9,54.12,'G',1);put(-7.9,54.12,'Z');
+ const fort=(lo,la)=>{const[cx,cy]=T(lo,la),pt=(x,y,t)=>{if(WM[y]&&WM[y][x]!==undefined)WM[y][x]=t;};for(let j=-7;j<=7;j++)for(let i=-7;i<=7;i++)if(i*i+j*j<=49)pt(cx+i,cy+j,'G');for(let j=-6;j<=6;j++)for(let i=-6;i<=6;i++){const d=Math.sqrt(i*i+j*j);if(d>=4.5&&d<5.5&&!(j>0&&Math.abs(i)<=1))pt(cx+i,cy+j,'X');}for(let j=-1;j<=1;j++)for(let i=-1;i<=1;i++)pt(cx+i,cy+j,'Y');pt(cx-3,cy-3,'Y');pt(cx+3,cy-3,'Y');pt(cx-3,cy+2,'Y');pt(cx+3,cy+2,'Y');};
+ fort(-8.25,53.8);put(-8.38,53.8,'Q');fort(-6.775,53.115);
+ put(-6.45,54.2,'G',1);
+ DOCK={larne:T(-5.82,54.85),skye:T(-6.13,57.41)};
+ NG=T(-6.48,53.69);
+ SPAWN=[sx,sy+4];
+ NPCS.forEach(n=>{if(n.lo!=null)[n.x,n.y]=T(n.lo,n.la);});
+ const river=pts=>{for(let k=0;k<pts.length-1;k++){const[a,b]=pts[k],[c,d]=pts[k+1];const[x0,y0]=TX(a,b),[x1,y1]=TX(c,d);const n=Math.ceil(Math.hypot(x1-x0,y1-y0)*2);for(let s=0;s<=n;s++){const x=Math.floor(x0+(x1-x0)*s/n),y=Math.floor(y0+(y1-y0)*s/n);if(WM[y]&&'GRT'.includes(WM[y][x]))WM[y][x]='r';}}};
+ river([[-6.95,53.56],[-6.8,53.6],[-6.65,53.64],[-6.5,53.7],[-6.4,53.71],[-6.3,53.72]]);
+ river([[-7.9,54.12],[-8.0,53.9],[-7.95,53.6],[-7.94,53.42],[-8.1,53.2],[-8.3,52.9],[-8.63,52.66]]);
+ put(-6.62,53.652,'o');put(-6.85,53.575,'o');put(-6.42,53.708,'o');
+ NPCS[0].x=sx;NPCS[0].y=sy+2;
+ LOCS=[['Emain Macha',-6.64,54.35],['Muirthemne',-6.2,54.0],['Newgrange',-6.48,53.69],['Hill of Tara',-6.72,53.62],['Rathcroghan',-8.25,53.8],['Oweynagat, Cave of the Cats',-8.38,53.8],["Connla's Well",-7.9,54.12],['Clochafarmore',-6.466,53.9745],['River Boyne',-6.62,53.652],['River Shannon',-7.94,53.42],['Dún Ailinne',-6.775,53.115],['Glenade Lough',-8.27,54.364],['Isle of Skye',-6.13,57.41]].map(([n,a,b])=>({n,x:T(a,b)[0],y:T(a,b)[1]}));
+ useMap('world');
+}
+function useMap(n){
+ mapName=n;
+ if(n=='world'){M=WM;MW=W;MH=H;return;}
+ MW=18;MH=12;M=[];
+ for(let y=0;y<MH;y++){M[y]=[];for(let x=0;x<MW;x++)M[y][x]=(x==0||y==0||x==MW-1||y==MH-1)?'W':(n=='cave'&&y>2&&y<9&&hh(x,y)<.1?'W':n=='lake'?'A':n=='cave'?'J':'L');}
+ M[11][9]=(n=='lake'||n=='cave')?'Q':'O';if(n=='cave')M[2][9]='O';
+}
+function enterOW(){owFrom=[P.x,P.y];owBack=mapName;useMap('ow');P.x=9;P.y=9;}
+function exitOW(){useMap(owBack);P.x=owFrom[0];P.y=owFrom[1]+1;}
+function enterLake(){useMap('lake');P.x=9;P.y=9;if(!dobharDone)say(['You wade into Glenade Lough. Something vast stirs beneath the water.'],()=>fight(EN.dobhar,()=>{dobharDone=true;P.atk+=2;say(['The Dobhar-chú sinks into the dark water.','Its evil is broken. ATK +2.']);}));}
+function exitLake(){useMap('world');P.x=LAKEOUT[0];P.y=LAKEOUT[1];}
+function enterCave(){useMap('cave');P.x=9;P.y=9;}
+function exitCave(){useMap('world');P.x=CAVEOUT[0];P.y=CAVEOUT[1];}
+function boat(){
+ const L=DOCK.larne,toSky=P.x==L[0]&&P.y==L[1],d=toSky?DOCK.skye:L;
+ say([toSky?'The boatman rows you across the sea to Skye.':'The boatman rows you back to Larne.'],()=>{P.x=d[0];P.y=d[1];if(!toSky&&stage==5)arrival();});
+}
+function bullTile(){
+ if(stage<7)say(['The hills are quiet. The bull will not come yet.']);
+ else if(!bullDone)fight(EN.bull,()=>{bullDone=true;stage=8;say(['The bull is yours. Now ride west and end Medb.']);});
+}
+function events(){
+ if(mapName!='world'||F||dlg)return;
+ const N=n=>NPCS.find(q=>q.n==n),near=(x,y,r)=>Math.abs(P.x-x)<=r&&Math.abs(P.y-y)<=r,B=N('boys'),C=N('culann');
+ if(stage==1&&!boysDone&&near(B.x,B.y,2))say(["Sétanta runs onto the field without asking the boys' protection.",'The boys take it as a challenge!'],()=>boysFight(3));
+ else if(stage==3&&near(C.x,C.y,2))houndFight();
+ else if(stage==6&&!fordOn&&near(FORD[0],FORD[1],3)){fordOn=true;say(['Sétanta invokes the right of single combat at the ford.','Connacht sends its champions one at a time.'],()=>ford(3));}
+ else if(stage>=8&&!MEDB.dead&&near(MEDB.x,MEDB.y,3))startMedb();
+}
+function boysFight(n){
+ if(n==0){boysDone=true;stage=2;say(['Conchobar strides onto the field: "Enough!"','"Sétanta, the troop has taken you under its protection."','Sétanta runs after the boys, demanding they take his protection too.','"Finish your game. Culann\'s feast is tonight. Come when you can."']);return;}
+ fight(EN.boy,()=>boysFight(n-1));
+}
+function houndFight(){fight(EN.hound,()=>{stage=4;P.name='Cú Chulainn';say(["Culann weeps over his hound.",'Sétanta vows to rear a pup and guard the house until it grows.','Cathbad the druid: "Henceforth your name is Cú Chulainn, Culann\'s Hound."','Scáthach keeps her school on the isle of Skye. Take the boat from Larne.']);});}
+function ford(n){
+ if(n==0){stage=7;say(["The ford is held. Medb's host is spent.",'The Brown Bull still roams the Cooley hills. Ride there.']);return;}
+ fight(EN.champ,()=>ford(n-1));
+}
+function arrival(){
+ stage=6;
+ say(["You were with a woman when you should have been watching the border.","Queen Medb's host has crossed into Ulster by surprise.",'Make for the ford and invoke the right of single combat.']);
+}
+function startMedb(){fight(EN.medb,()=>{MEDB.dead=true;stage=9;mode='end';});}
+
+// ---- overworld ----
+const say=(l,cb)=>{dlg={l,i:0,cb}};
+function talk(n){
+ if(n.n=='king'){
+  if(stage<=1){say(['Welcome to Emain Macha. The boys play hurling on the field below.']);}
+  else{P.hp=P.max;say(['Rest now. You are made whole again.']);}
+ }else if(n.n=='guard'){
+  if(stage==0)say(['Turn back. No one crosses this road.']);
+  else if(!n.dead)fight(EN.guard,()=>{n.dead=true;});
+ }else if(n.n=='medb'){
+  if(stage>=8&&!n.dead)startMedb();else say(['Medb is not yet within reach of your spear.']);
+ }else if(n.n=='mother'){
+  if(stage==0){stage=1;say(['Sétanta, the boy-troop at Emain Macha will take you if you ask.','Go on, then. Mind yourself on the road.']);}
+  else say(['Mind yourself, Sétanta.']);
+ }else if(n.n=='culann'){
+  if(stage==2){stage=3;say(['Culann: "Conchobar, will anyone be arriving late to my feast?"','Conchobar has already forgotten Sétanta. Culann looses his hound.']);}
+  else if(stage==3)say(['Culann: "My hound guards the house until the stranger comes."']);
+  else say(['Culann the smith bows to the king.']);
+ }else if(n.n=='scathach'){
+  if(stage==4)say(['Scáthach: "I will train you in the Gáe Bulg. Stand ready."'],()=>fight(EN.scath,()=>{P.sp='Gáe Bulg';gain('gae');EQ.weapon='gae';applyEquip();stage=5;say(['Scáthach gives you the Gáe Bulg.','Its barb is never thrown lightly.']);}));
+  else say(['Scáthach: "The spear is yours only once you have earned it."']);
+ }else if(n.n=='ferdiad'){
+  say(['Ferdiad clasps your arm: "We learned together under Scáthach."','"Stand with me in Ulster, whatever comes."']);
+ }else if(n.n=='fergus'){
+  say(['Fergus mac Róich, your foster-father, grips your shoulder.','"Go on to Emain. The boys have customs you will need to learn."']);
+ }else if(n.say){say(n.say);
+ }else if(n.n=='warden'){
+  if(!owDone)fight(EN.warden,()=>{owDone=true;n.dead=true;P.atk+=3;say(['Your strength grows. ATK +3.']);});
+ }
+}
+function interact(){const x=P.x+P.dx,y=P.y+P.dy,n=NPCS.find(q=>q.m==mapName&&!q.dead&&q.x==x&&q.y==y),t=M[y]?.[x];if(n)talk(n);else if(t=='U')say(['A standing stone of the old kings, leaning in a Louth field.','Cú Chulainn is said to have tied himself to a stone like this to die on his feet.']);else if(t=='E')say(['The entrance stone: a triple spiral, cut long before the mound was raised.']);}
+function tryMove(dx,dy){
+ P.dx=dx;P.dy=dy;
+ const nx=P.x+dx,ny=P.y+dy;
+ const n=NPCS.find(q=>q.m==mapName&&!q.dead&&q.x==nx&&q.y==ny);
+ if(n){talk(n);return;}
+ const t=M[ny]?.[nx];
+ if(!t||'TWVHCMSNKUEXY'.includes(t))return;
+ P.x=nx;P.y=ny;
+ checkPlaces();
+ if(mapName=='lake'&&t=='Q'){exitLake();return;}
+ if(t=='A'&&mapName=='world'){enterLake();return;}
+ if(mapName=='cave'&&t=='Q'){exitCave();return;}
+ if(mapName=='cave'&&t=='O'){enterOW();return;}
+ if(mapName=='world'&&t=='Q'){enterCave();return;}
+ if(t=='O'){if(mapName=='world')enterOW();else exitOW();return;}
+ if(t=='Z'){P.hp=P.max;say([`${P.name} drinks from Connla's Well. Its hazel-wisdom restores you.`]);return;}
+ if(t=='D'){boat();return;}
+ if(t=='B'){bullTile();return;}
+ if(t=='o'&&mapName=='world'){fight(EN.salmon,()=>{WM.forEach(r=>{for(let i=0;i<r.length;i++)if(r[i]=='o')r[i]='r';});});return;}
+ if(t=='R'&&mapName=='world'){const r=Math.random();if(r<.015)fight(EN.bear);else if(r<.045)fight(EN.wolf);else if(r<.06)fight(EN.scout);}
+ events();
+}
+
+// ---- boss-battler fights ----
+function fight(c,cb){
+ F={c,cb,px:128,py:190,ex:128,ey:c.ey||72,ehp:c.hp,ehm:c.hp,fx:0,fy:-1,ac:0,dc:0,sc:0,inv:0,flash:0,pat:null,wait:70,pi:0,t:0,pj:[],bul:[],rings:[],ax:0,ay:0,won:0,lost:0,swing:0,rage:0,rm:1,rused:0};
+ mode='fight';say(c.intro);
+}
+function endP(e,w){e.pat=null;e.wait=w;}
+function hitE(d){const e=F;if(e.rage>0){d=Math.round(d*e.rm);e.rm=Math.min(3,e.rm+.25);}e.ehp-=d;e.flash=6;if(e.ehp<=0&&!e.won){e.won=1;winFight();}}
+function hurt(d){const e=F;if(e.inv>0||e.lost||e.rage>0)return;e.inv=40;P.hp=Math.max(0,P.hp-d);if(P.hp>0&&P.hp<P.max*.3&&EQ.armour&&!e.rused){e.rused=1;e.rage=600;e.rm=1;}if(P.hp<=0){e.lost=1;loseFight();}}
+function winFight(){const e=F,L=e.c.drop?[...e.c.win,ITEMS[e.c.drop].n+' gained.']:e.c.win;if(e.c.drop)gain(e.c.drop);say(L,()=>{const cb=e.cb;F=null;mode='world';cb&&cb();});}
+function loseFight(){say([`${P.name} falls...`,'The Red Branch carries him home to heal.'],()=>{F=null;P.hp=P.max;fordOn=false;useMap('world');P.x=SPAWN[0];P.y=SPAWN[1];mode='world';});}
+function fightKey(k){
+ const e=F,c=e.c;
+ if(k=='z'&&e.ac==0){e.ac=16;if(Math.hypot(e.ex-e.px,e.ey-e.py)<(c.rad?c.rad+20:(c.bull?44:34)))hitE(P.atk);}
+ else if(k=='x'&&e.dc==0){e.dc=12;e.inv=Math.max(e.inv,12);}
+ else if(k=='c'&&e.sc==0){e.sc=50;const a0=Math.atan2(e.fy,e.fx);for(let i=0;i<P.shots;i++){const a=a0+(i-(P.shots-1)/2)*.25;e.pj.push({x:e.px+Math.cos(a)*20,y:e.py+Math.sin(a)*20,vx:Math.cos(a)*5,vy:Math.sin(a)*5,l:50});}if(P.sp=='Sliotar')e.swing=12;}
+}
+function fightUpdate(){
+ const e=F,c=e.c;
+ const mx=(keys.arrowright||keys.d?1:0)-(keys.arrowleft||keys.a?1:0);
+ const my=(keys.arrowdown||keys.s?1:0)-(keys.arrowup||keys.w?1:0);
+ if(e.dc>0){e.dc--;e.px+=e.fx*6;e.py+=e.fy*6;}
+ else if(mx||my){const l=Math.hypot(mx,my);e.fx=mx/l;e.fy=my/l;e.px+=e.fx*P.spd;e.py+=e.fy*P.spd;}
+ e.px=Math.max(12,Math.min(244,e.px));e.py=Math.max(60,Math.min(212,e.py));
+ if(e.ac>0)e.ac--;if(e.sc>0)e.sc--;if(e.inv>0)e.inv--;if(e.flash>0)e.flash--;if(e.swing>0)e.swing--;if(e.rage>0){e.rage--;if(e.rage==0)e.rm=1;}
+ if(!e.pat){if(e.wait>0)e.wait--;else{e.pat=c.pats[e.pi++%c.pats.length];e.t=0;}}
+ else{
+  e.t++;
+  const dx=e.px-e.ex,dy=e.py-e.ey,dl=Math.hypot(dx,dy)||1;
+  if(e.pat=='chase'){e.ex+=dx/dl*c.spd;e.ey+=dy/dl*c.spd;if(e.t>150)endP(e,60);}
+  else if(e.pat=='charge'){
+   if(e.t==1){e.ax=dx/dl;e.ay=dy/dl;}
+   if(e.t>40){e.ex+=e.ax*5;e.ey+=e.ay*5;}
+   if(e.ex<20||e.ex>236||e.ey<60||e.ey>208)endP(e,90);else if(e.t>100)endP(e,50);
+  }
+  else if(e.pat=='volley'){
+   if(e.t==30){const a0=Math.atan2(dy,dx);for(let i=-2;i<=2;i++){const a=a0+i*.22;e.bul.push({x:e.ex,y:e.ey,vx:Math.cos(a)*2.2,vy:Math.sin(a)*2.2});}}
+   if(e.t>50)endP(e,40);
+  }
+  else if(e.pat=='ring'){if(e.t==30)e.rings.push({x:e.ex,y:e.ey,r:6,h:0});if(e.t>32)endP(e,60);}
+ }
+ e.bul=e.bul.filter(b=>{b.x+=b.vx;b.y+=b.vy;if(Math.hypot(b.x-e.px,b.y-e.py)<7){hurt(c.touch);return false;}return b.x>-10&&b.x<266&&b.y>-10&&b.y<234;});
+ e.rings=e.rings.filter(r=>{r.r+=1.1;if(!r.h&&Math.abs(Math.hypot(r.x-e.px,r.y-e.py)-r.r)<5){r.h=1;hurt(c.touch);}return r.r<200;});
+ e.pj=e.pj.filter(p=>{p.x+=p.vx;p.y+=p.vy;p.l--;if(Math.hypot(p.x-e.ex,p.y-e.ey)<(c.rad||(c.bull?26:16))){hitE(P.sd);return false;}return p.l>0;});
+ if(e.inv==0&&Math.hypot(e.ex-e.px,e.ey-e.py)<(c.rad||(c.bull?26:16)))hurt(c.touch);
+}
+
+// ---- input ----
+const isAct=k=>k=='z'||k=='enter'||k==' ';
+function startGame(){
+ P={x:0,y:0,dx:0,dy:-1,...CL[pick]};
+ useMap('world');P.x=SPAWN[0];P.y=SPAWN[1];mode='world';
+ P.x=START[0];P.y=START[1];mode='world';
+ say(['Muirthemne Plain, near Dundalk. A boy named Sétanta lives here with his parents.','He begs to join the boy-troop at Emain Macha.','Speak to his mother at the door, then set out.']);
+}
+function reset(){mode='title';dlg=null;F=null;OWN=['hurley'];EQ={weapon:'hurley',charm:null,armour:null};stage=0;bullDone=medbDone=owDone=boysDone=fordOn=false;NPCS.forEach(n=>n.dead=false);useMap('world');}
+function press(k){
+ if(mode=='title'){if(isAct(k))startGame();return;}
+ if(k=='r'&&mode=='end'){reset();return;}
+ if(dlg){if(isAct(k)){dlg.i++;if(dlg.i>=dlg.l.length){const cb=dlg.cb;dlg=null;cb&&cb();}}return;}
+ if(mode=='inv'){if(k=='arrowup'||k=='w')invSel=Math.max(0,invSel-1);else if(k=='arrowdown'||k=='s')invSel=Math.min(OWN.length-1,invSel+1);else if(isAct(k))equipToggle(OWN[invSel]);else if(k=='x'||k=='i')mode='world';return;}
+ if(mode=='world'&&k=='i'){mode='inv';invSel=0;return;}
+ if(mode=='fight'){if(k=='z'||k=='x'||k=='c')fightKey(k);return;}
+ if(isAct(k))interact();
+}
+addEventListener('keydown',e=>{
+ const k=e.key.toLowerCase();keys[k]=true;
+ if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();
+ if(!e.repeat)press(k);
+});
+addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=false;});
+
+function update(){
+ frame++;
+ if(dlg)return;
+ if(mode=='fight'){fightUpdate();return;}
+ if(mode!='world'&&mode!='end')return;
+ if(mv>0){mv--;return;}
+ const dx=(keys.arrowleft||keys.a?-1:0)+(keys.arrowright||keys.d?1:0);
+ const dy=(keys.arrowup||keys.w?-1:0)+(keys.arrowdown||keys.s?1:0);
+ if(dx||dy){mv=6;if(dx)tryMove(dx,0);else tryMove(0,dy);}
+}
+
+// ---- drawing ----
+function spiral(cx,cy,R,turns,col,rot=0){
+ ctx.strokeStyle=col;ctx.lineWidth=1;ctx.beginPath();
+ for(let i=0;i<=20;i++){const t=i/20,a=t*turns*Math.PI*2+rot,r=t*R,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
+ ctx.stroke();
+}
+function spr(name,x,y,sc,pal){
+ SPR[name].forEach((row,j)=>{for(let i=0;i<12;i++){let c=row[i];if(c=='.')continue;if(pal&&pal[c])c=pal[c];ctx.fillStyle=COL[c];ctx.fillRect(x+i*sc,y+j*sc,sc,sc);}});
+}
+function tile(t,x,y,tx,ty){
+ const f=(frame>>4)&1,h=hh(tx,ty);
+ const base={G:'#5b9a4c',R:'#3d6e3a',T:'#5b9a4c',M:'#6b6878',S:'#2f5c8f',V:'#2f5c8f',D:'#8a5a2b',F:'#8a5a2b',O:'#5a3f8c',Q:'#2a1f3c',Z:'#2f5c8f',A:'#2c5a8c',U:'#5b9a4c',N:'#6f7f4f',K:'#5b9a4c',E:'#5b9a4c',J:'#2a2230',X:'#5b9a4c',Y:'#8a6a3a',r:'#2f5c8f',o:'#2f5c8f',B:'#5b9a4c',C:'#5b9a4c',H:'#8a2e22',W:'#8b8794',L:'#5a3f8c'}[t];
+ ctx.fillStyle=base;ctx.fillRect(x,y,TS,TS);
+ if(t=='X'){ctx.fillStyle='#6b4a2a';for(let i=0;i<4;i++)ctx.fillRect(x+1+i*4,y+3,2,11);ctx.fillStyle='#8a6a3a';for(let i=0;i<4;i++)ctx.fillRect(x+1+i*4,y+3,2,2);}
+ if(t=='Y'){ctx.fillStyle='#d8c9a0';ctx.beginPath();ctx.moveTo(x+8,y+1);ctx.lineTo(x+15,y+15);ctx.lineTo(x+1,y+15);ctx.fill();ctx.strokeStyle='#8a7a55';ctx.beginPath();ctx.moveTo(x+8,y+1);ctx.lineTo(x+5,y+15);ctx.moveTo(x+8,y+1);ctx.lineTo(x+11,y+15);ctx.stroke();}
+ if(t=='r'){ctx.strokeStyle='#6f9fd0';ctx.beginPath();ctx.moveTo(x+2,y+5+f*3);ctx.lineTo(x+7,y+5+f*3);ctx.moveTo(x+8,y+11-f*3);ctx.lineTo(x+14,y+11-f*3);ctx.stroke();}
+ if(t=='o'){ctx.strokeStyle='#d9f0ff';ctx.beginPath();ctx.arc(x+8,y+9-f*2,3,0,Math.PI*2);ctx.moveTo(x+13,y+5);ctx.arc(x+11,y+4,2,0,Math.PI*2);ctx.stroke();}
+ if(t=='J'&&h<.3){ctx.fillStyle='#3a3142';ctx.fillRect(x+Math.floor(h*40)+3,y+8,2,2);}
+ if(t=='G'&&h<.25){ctx.fillStyle='#4a8640';ctx.fillRect(x+Math.floor(h*40)+3,y+6,2,2);}
+ if(t=='R'){ctx.fillStyle='#8fbf5a';for(let i=0;i<3;i++)ctx.fillRect(x+3+i*5+f,y+3+(i&1)*4,1,7);}
+ if(t=='T'){ctx.fillStyle='#24502e';ctx.beginPath();ctx.arc(x+8,y+7,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#5a3a1e';ctx.fillRect(x+7,y+11,2,5);}
+ if(t=='M'){ctx.fillStyle='#8c8798';ctx.beginPath();ctx.moveTo(x+8,y+2);ctx.lineTo(x+15,y+15);ctx.lineTo(x+1,y+15);ctx.fill();}
+ if(t=='S'||t=='V'){ctx.strokeStyle='#6f9fd0';ctx.beginPath();ctx.arc(x+4,y+5+f*2,3,0,Math.PI);ctx.moveTo(x+15,y+11+f*2);ctx.arc(x+12,y+11+f*2,3,0,Math.PI);ctx.stroke();}
+ if(t=='D'||t=='F'){ctx.fillStyle='#5c3a1a';for(let i=0;i<4;i++)ctx.fillRect(x+i*4,y,1,TS);}
+ if(t=='O'){ctx.fillStyle='#1a1424';ctx.fillRect(x+5,y+3,6,10);spiral(x+8,y+8,7,2,'#e0a84a',frame*.04);spiral(x+8,y+8,4,1.5,'#f0b84a',-frame*.06);}
+ if(t=='A'){ctx.strokeStyle='#6f9fd0';ctx.beginPath();ctx.arc(x+4+((frame>>4)&3),y+6,3,0,Math.PI);ctx.stroke();ctx.beginPath();ctx.arc(x+11,y+11,3,0,Math.PI);ctx.stroke();}
+ if(t=='U'){ctx.fillStyle='#9a9aa6';ctx.fillRect(x+4,y+2,8,13);ctx.fillStyle='#6a6a76';ctx.fillRect(x+10,y+2,2,13);spiral(x+8,y+8,3,1.5,'#4a4a56');}
+ if(t=='N'){ctx.fillStyle='#5f6f44';ctx.fillRect(x+4,y+4,8,8);}
+ if(t=='K'){ctx.fillStyle='#efe2bd';ctx.fillRect(x+4,y+4,8,8);ctx.fillStyle='#b8ae8f';ctx.fillRect(x+6,y+6,4,4);}
+ if(t=='E'){ctx.fillStyle='#6b6b78';ctx.fillRect(x+3,y+3,10,10);spiral(x+8,y+8,5,3,'#e0a84a');}
+ if(t=='Q')spiral(x+8,y+8,7,2,'#b08fd0',frame*.03);
+ if(t=='Z'){spiral(x+8,y+8,6,2,'#e0a84a');spiral(x+8,y+8,2,1,'#fff6e0');}
+ if(t=='B'){ctx.fillStyle='#6b4423';ctx.fillRect(x+4,y+6,8,6);ctx.fillStyle='#efe2bd';ctx.fillRect(x+3,y+4,1,3);ctx.fillRect(x+12,y+4,1,3);}
+ if(t=='C'){ctx.fillStyle='#8a5fb0';ctx.beginPath();ctx.moveTo(x+8,y+2);ctx.lineTo(x+15,y+15);ctx.lineTo(x+1,y+15);ctx.fill();ctx.fillStyle='#1a1424';ctx.fillRect(x+7,y+9,2,6);}
+ if(t=='H'){ctx.fillStyle='#e0a84a';ctx.fillRect(x,y,TS,2);spiral(x+8,y+9,5,1.5,'#e0a84a');}
+ if(t=='W')spiral(x+8,y+8,5,1.5,'#d9c49a');
+ if(t=='L')spiral(x+8,y+8,5,1.5,'#8a6ab8',frame*.02);
+}
+function hpBar(x,y,n,hp,max){
+ ctx.font='bold 8px monospace';ctx.fillStyle='#fff6e0';ctx.fillText(n,x,y+7);
+ ctx.fillStyle='#1a1424';ctx.fillRect(x,y+10,108,6);
+ ctx.fillStyle=hp/max>.3?'#3fbf6b':'#d64a3a';ctx.fillRect(x+1,y+11,Math.max(0,106*hp/max),4);
+}
+function bull(x,y,fl){
+ ctx.fillStyle=fl?'#fff6e0':'#6b4423';ctx.fillRect(x-22,y-12,40,22);ctx.fillRect(x+12,y-16,14,14);
+ ctx.fillStyle=fl?'#efe2bd':'#4a2c16';ctx.fillRect(x-20,y+10,5,8);ctx.fillRect(x-8,y+10,5,8);ctx.fillRect(x+4,y+10,5,8);ctx.fillRect(x+14,y+10,5,8);
+ ctx.fillStyle='#efe2bd';ctx.fillRect(x+13,y-22,2,6);ctx.fillRect(x+24,y-22,2,6);
+ ctx.fillStyle='#1a1424';ctx.fillRect(x+21,y-12,2,2);
+}
+function applyEquip(){const w=EQ.weapon;if(w=='gae'){P.sp='Gáe Bulg';P.sd=24;}else{P.sp='Sliotar';P.sd=8;}P.max=60+(EQ.charm?20:0);P.hp=Math.min(P.hp,P.max);}
+function gain(id){if(!OWN.includes(id))OWN.push(id);}
+function equipToggle(id){const k=ITEMS[id].s;EQ[k]=EQ[k]==id?(k=='weapon'?'hurley':null):id;applyEquip();}
+function gear(x,y,s){if(EQ.armour){ctx.fillStyle=EQ.armour=='bear'?'#6b4423':'#8a8a92';ctx.fillRect(x+2*s,y+6*s,8*s,5*s);}if(EQ.weapon=='gae'){ctx.fillStyle='#a8b0bc';ctx.fillRect(x+10*s,y-s,s,13*s);ctx.fillStyle='#e0a84a';ctx.fillRect(x+9*s,y-3*s,3*s,3*s);}else hurl(x,y,s);}
+function hurl(x,y,s){ctx.fillStyle='#8a5a2b';ctx.fillRect(x+10*s,y+3*s,s,9*s);ctx.fillStyle='#c8893a';ctx.fillRect(x+9*s,y+2*s,3*s,4*s);}
+function bear(x,y,fl){
+ ctx.fillStyle=fl?'#fff6e0':'#6b4423';
+ ctx.beginPath();ctx.ellipse(x,y,36,26,0,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.arc(x+30,y-14,16,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.arc(x+20,y-32,6,0,Math.PI*2);ctx.arc(x+42,y-32,6,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#8a6a4a';ctx.beginPath();ctx.ellipse(x+40,y-8,8,6,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#4a2c16';ctx.fillRect(x-30,y+18,8,12);ctx.fillRect(x-14,y+18,8,12);ctx.fillRect(x+6,y+18,8,12);ctx.fillRect(x+20,y+18,8,12);
+ ctx.fillStyle='#1a1424';ctx.fillRect(x+34,y-18,3,3);ctx.fillRect(x+42,y-8,3,3);
+}
+function wolf(x,y,fl){
+ ctx.fillStyle=fl?'#fff6e0':'#8a8a92';
+ ctx.beginPath();ctx.ellipse(x,y,28,12,0,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.ellipse(x+26,y-6,12,9,0,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.moveTo(x+20,y-12);ctx.lineTo(x+22,y-22);ctx.lineTo(x+27,y-13);ctx.fill();
+ ctx.beginPath();ctx.moveTo(x+28,y-12);ctx.lineTo(x+32,y-22);ctx.lineTo(x+34,y-11);ctx.fill();
+ ctx.beginPath();ctx.moveTo(x-26,y);ctx.lineTo(x-42,y-10);ctx.lineTo(x-34,y+4);ctx.fill();
+ ctx.fillStyle='#5a5a62';ctx.fillRect(x-18,y+8,5,12);ctx.fillRect(x-6,y+8,5,12);ctx.fillRect(x+8,y+8,5,12);ctx.fillRect(x+16,y+8,5,12);
+ ctx.fillStyle='#1a1424';ctx.fillRect(x+30,y-8,3,3);
+}
+function salmon(x,y,fl){
+ ctx.fillStyle=fl?'#fff6e0':'#d8a0a0';
+ ctx.beginPath();ctx.ellipse(x,y,34,11,0,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.moveTo(x-30,y);ctx.lineTo(x-48,y-12);ctx.lineTo(x-48,y+12);ctx.fill();
+ ctx.fillStyle='#8a4a4a';for(let i=0;i<6;i++)ctx.fillRect(x-22+i*8,y-4+(i&1)*6,2,2);
+ ctx.fillStyle='#1a1424';ctx.fillRect(x+24,y-4,3,3);
+}
+function otter(x,y,fl){
+ ctx.fillStyle=fl?'#c8c8c8':'#fff6e0';
+ ctx.beginPath();ctx.ellipse(x,y,64,24,0,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.ellipse(x+58,y-6,26,20,0,0,Math.PI*2);ctx.fill();
+ ctx.beginPath();ctx.ellipse(x-120,y+2,46,8,0.2,0,Math.PI*2);ctx.fill();
+ ctx.fillRect(x-40,y+14,16,22);ctx.fillRect(x+10,y+14,16,22);ctx.fillRect(x+38,y+10,16,20);
+ ctx.beginPath();ctx.ellipse(x+46,y-24,6,7,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x+68,y-24,6,7,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#1a1424';
+ ctx.fillRect(x-5,y-18,10,24);ctx.fillRect(x-18,y-9,36,10);
+ ctx.beginPath();ctx.ellipse(x+46,y-30,3,4,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(x+68,y-30,3,4,0,0,Math.PI*2);ctx.fill();
+ ctx.fillRect(x+66,y-8,5,5);
+}
+function dog(x,y,fl){
+ ctx.fillStyle=fl?'#fff6e0':'#8a8a92';ctx.fillRect(x-24,y-6,40,16);ctx.fillRect(x+10,y-16,14,12);
+ ctx.fillStyle='#5a5a62';ctx.fillRect(x-22,y+10,5,10);ctx.fillRect(x-10,y+10,5,10);ctx.fillRect(x+4,y+10,5,10);ctx.fillRect(x+12,y+10,5,10);
+ ctx.fillRect(x+8,y-22,4,8);ctx.fillRect(x+20,y-22,4,8);
+ ctx.fillStyle='#1a1424';ctx.fillRect(x+18,y-12,2,2);
+}
+function prov(x,y){
+ const lo=x/32-10.7,la=57.9-y/32;
+ if(la>=53.9&&(lo>-8.1||la>=54.6))return la>=56&&lo>-6.5?'Alba':'Ulster';
+ if(lo>=-7.0&&lo<=-6.2&&la>=53.3&&la<53.9)return 'Meath';
+ if(lo<-7.9&&la>=52.9)return 'Connacht';
+ if(lo>=-7.9&&la>=52.2)return 'Leinster';
+ return 'Munster';
+}
+const PT={Ulster:'rgba(60,110,220,.12)',Meath:'rgba(170,80,220,.12)',Connacht:'rgba(220,80,60,.12)',Leinster:'rgba(60,200,120,.12)',Munster:'rgba(220,180,60,.12)',Alba:'rgba(120,160,220,.08)'};
+function provDraw(tx,ty,x,y){
+ if(M[ty][tx]=='S')return;const p=prov(tx,ty);ctx.fillStyle=PT[p];ctx.fillRect(x,y,TS,TS);
+ if(p!=prov(tx+1,ty)&&M[ty][tx+1]!='S'){ctx.fillStyle='#e0a84a';ctx.fillRect(x+TS-1,y,1,TS);}
+ if(p!=prov(tx,ty+1)&&M[ty+1]?.[tx]!='S'){ctx.fillStyle='#e0a84a';ctx.fillRect(x,y+TS-1,TS,1);}
+}
+function checkPlaces(){
+ if(mapName!='world')return;
+ const pv=prov(P.x,P.y),L=LOCS.find(l=>Math.abs(P.x-l.x)<=1&&Math.abs(P.y-l.y)<=1);
+ if(pv!=curProv){curProv=pv;banner={t:pv,f:120};}
+ if(L&&L.n!=lastLoc)banner={t:L.n,f:120};
+ lastLoc=L?L.n:'';
+}
+function drawInv(){
+ ctx.textAlign='left';ctx.fillStyle='rgba(18,14,28,.94)';ctx.fillRect(16,16,224,192);ctx.strokeStyle='#c8893a';ctx.strokeRect(16.5,16.5,223,191);
+ ctx.font='bold 9px monospace';ctx.fillStyle='#f0b84a';ctx.fillText('INVENTORY',24,30);
+ ctx.font='8px monospace';
+ OWN.forEach((id,i)=>{const worn=Object.values(EQ).includes(id);ctx.fillStyle=i==invSel?'#f0b84a':'#efe2bd';ctx.fillText((i==invSel?'> ':'  ')+ITEMS[id].n+(worn?'  [worn]':''),24,46+i*12);});
+ ctx.fillStyle='#8a7a5a';ctx.fillText('Weapon: '+ITEMS[EQ.weapon].n,24,150);ctx.fillText('Charm: '+(EQ.charm?ITEMS[EQ.charm].n:'none'),24,162);ctx.fillText('Armour: '+(EQ.armour?ITEMS[EQ.armour].n:'none'),24,174);
+ ctx.fillStyle='#efe2bd';ctx.fillText('Z equip   X close',24,196);
+}
+function drawWorld(){
+ ctx.textAlign='left';
+ camX=Math.max(0,Math.min(MW*TS-256,P.x*TS+8-128));
+ camY=Math.max(0,Math.min(MH*TS-224,P.y*TS+8-112));
+ for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){
+  const x=tx*TS-camX,y=ty*TS-camY;
+  if(x>-TS&&x<256&&y>-TS&&y<224){tile(M[ty][tx],x,y,tx,ty);if(mapName=='world')provDraw(tx,ty,x,y);}
+ }
+ NPCS.forEach(n=>{if(n.m==mapName&&!n.dead)spr(n.spr,n.x*TS-camX+2,n.y*TS-camY+2,1,n.pal);});
+ spr('hero',P.x*TS-camX+2,P.y*TS-camY+2,1,P.pal);gear(P.x*TS-camX+2,P.y*TS-camY+2,1);
+ ctx.fillStyle='rgba(18,14,28,.85)';ctx.fillRect(0,0,256,11);
+ ctx.fillStyle='#f0b84a';ctx.font='bold 8px monospace';
+ ctx.fillText(`${P.name}  HP ${P.hp}/${P.max}  ATK ${P.atk}`,4,8);
+ if(banner&&banner.f>0){banner.f--;ctx.fillStyle='rgba(18,14,28,.85)';ctx.fillRect(40,16,176,14);ctx.fillStyle='#f0b84a';ctx.textAlign='center';ctx.fillText(banner.t,128,26);ctx.textAlign='left';}
+}
+function drawFight(){
+ const e=F,c=e.c;
+ ctx.textAlign='left';
+ ctx.fillStyle='#2b2140';ctx.fillRect(0,0,256,224);
+ for(let k=0;k<3;k++)spiral(128,140,120,2,'#3a2f5a',k*2.094);
+ if(e.pat=='charge'&&e.t>=1&&e.t<=40){ctx.strokeStyle='#f0b84a';ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(e.ex,e.ey);ctx.lineTo(e.ex+e.ax*150,e.ey+e.ay*150);ctx.stroke();ctx.setLineDash([]);}
+ if(c.bull)bull(e.ex,e.ey,e.flash>0);
+ else if(c.hound)dog(e.ex,e.ey,e.flash>0);
+ else if(c.otter)otter(e.ex,e.ey,e.flash>0);
+ else if(c.bear)bear(e.ex,e.ey,e.flash>0);
+ else if(c.wolf)wolf(e.ex,e.ey,e.flash>0);
+ else if(c.salmon)salmon(e.ex,e.ey,e.flash>0);
+ else if(!(e.flash&1))spr('warrior',e.ex-24,e.ey-24,4,c.pal);
+ if(!(e.inv>0&&(frame>>2)&1)){spr('hero',e.px-24,e.py-24,4,P.pal);gear(e.px-24,e.py-24,4);}
+ if(e.swing>0){const a0=Math.atan2(e.fy,e.fx),k=e.swing/12;ctx.strokeStyle='#c8893a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(e.px,e.py,22,a0-1.2*k,a0+1.2*k);ctx.stroke();ctx.lineWidth=1;}
+ ctx.fillStyle='#f0b84a';e.bul.forEach(b=>ctx.fillRect(b.x-2,b.y-2,4,4));
+ ctx.fillStyle='#fff6e0';e.pj.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();});
+ if(e.rage>0){ctx.strokeStyle='#b8382c';ctx.beginPath();ctx.arc(e.px,e.py,30+((frame>>2)&3),0,Math.PI*2);ctx.stroke();if(e.rage>540){ctx.fillStyle='#b8382c';ctx.font='bold 8px monospace';ctx.fillText('RIASTRAD!',e.px-30,e.py-36);}}
+ ctx.strokeStyle='#f0b84a';e.rings.forEach(r=>{ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);ctx.stroke();});
+ hpBar(8,4,c.n,e.ehp,e.ehm);hpBar(8,204,P.name,P.hp,P.max);
+ ctx.font='bold 8px monospace';ctx.fillStyle='#efe2bd';ctx.fillText('Z hit X dash C '+P.sp,118,14);
+}
+function drawTitle(){
+ ctx.fillStyle='#120e1c';ctx.fillRect(0,0,256,224);
+ for(let k=0;k<3;k++)spiral(128,58,30,1.25,'#c8893a',k*2.094);
+ ctx.textAlign='center';
+ ctx.fillStyle='#f0b84a';ctx.font='bold 14px monospace';ctx.fillText('CÚ CHULAINN',128,108);
+ ctx.fillStyle='#efe2bd';ctx.font='8px monospace';ctx.fillText('The Ford of Ulster',128,120);
+ const cl=CL[pick];spr('hero',104,132,4,cl.pal);gear(104,132,4);
+ ctx.fillStyle='#f0b84a';ctx.fillText('< '+cl.name+' >',128,192);
+ ctx.fillStyle='#efe2bd';ctx.fillText(cl.desc,128,202);
+ if((frame>>5)&1)ctx.fillText('ENTER begin · LEFT/RIGHT hero',128,216);
+ ctx.textAlign='left';
+}
+function draw(){
+ if(mode=='title'){drawTitle();return;}
+ if(mode=='fight')drawFight();else drawWorld();
+ if(mode=='inv')drawInv();
+ if(mode=='end'&&!dlg){
+  ctx.fillStyle='rgba(18,14,28,.75)';ctx.fillRect(0,40,256,80);
+  ctx.textAlign='center';ctx.fillStyle='#f0b84a';ctx.font='bold 14px monospace';ctx.fillText('ULSTER IS SAFE',128,70);
+  ctx.fillStyle='#efe2bd';ctx.font='8px monospace';ctx.fillText('Press R to play again',128,92);
+  ctx.textAlign='left';
+ }
+ if(dlg){
+  ctx.fillStyle='#1a1424';ctx.fillRect(4,166,248,54);
+  ctx.strokeStyle='#c8893a';ctx.lineWidth=1;ctx.strokeRect(4.5,166.5,247,53);
+  ctx.fillStyle='#efe2bd';ctx.font='bold 8px monospace';ctx.fillText(dlg.l[dlg.i],12,190);
+  if((frame>>4)&1){ctx.fillStyle='#f0b84a';ctx.fillRect(238,210,5,4);}
+ }
+}
+function loop(){update();draw();requestAnimationFrame(loop);}
+mkWorld();
+loop();
+</script>
+</body>
+</html>
